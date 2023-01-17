@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CoreService_backend.Models;
 using CoreService_backend.Dao;
 namespace CoreService_backend.Controllers
 {
@@ -7,12 +6,18 @@ namespace CoreService_backend.Controllers
     [Route("[controller]")]
     public class User : ControllerBase
     {
-        UserList users = new UserList();
+        UserDao users = new UserDao();
         [HttpPost]
         [Route("registration")]
-        public void Post([FromBody] Models.User user)
+        public void Registration([FromBody] Models.User user)
         {
          users.Add(user);
+        }
+        [HttpPost]
+        [Route("login")]
+        public void Login([FromBody] Models.User user)
+        {
+            users.CheckLogin(user);
         }
     }
 }

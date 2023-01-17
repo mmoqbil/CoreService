@@ -3,11 +3,12 @@ using CoreService_backend.Models;
 using CoreService_backend.Dao;
 namespace CoreService_backend.Controllers
 {
-    public class Registration : ControllerBase
+    public class User : ControllerBase
     {
         UserList users = new UserList();
         [HttpPost]
-        public void Post([FromBody] User user)
+        [Route("[controller]")]
+        public void Post([FromBody] Models.User user)
         {
          users.Add(user);
         }

@@ -27,21 +27,45 @@ namespace CoreService_backend.Controllers
         [Route("login")]
         public void Login([FromBody] Models.User user)
         {
-            _users.CheckLogin(user);
+            try
+            {
+                Log.Information("Trying to login");
+                _users.CheckLogin(user);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error with login");
+            }
         }
 
         [HttpPost]
         [Route("changelogin")]
         public void ChangeLogin([FromBody] Models.User user)
         {
-            _users.UpdateLogin(user);
+            try
+            {
+                Log.Information("Trying to change login");
+                _users.UpdateLogin(user);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "Error with changing login");
+            }
         }
 
         [HttpPost]
         [Route("changepassword")]
         public void ChangePassword([FromBody] Models.User user)
         {
-            _users.UpdatePassword(user);
+            try
+            {
+                Log.Information("Trying to change password");
+                _users.UpdatePassword(user);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "Error with changing password");
+            }
         }
     }
 }

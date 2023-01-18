@@ -9,6 +9,7 @@ namespace CoreService_backend.Controllers
     public class Resource : ControllerBase
     {
         private ResourceDao _resource = new ResourceDao();
+
         [HttpPost]
         [Route("resources")]
         public string GetData()

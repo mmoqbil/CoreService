@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CoreService_backend.Dao;
+using Serilog;
 namespace CoreService_backend.Controllers
 {
     [ApiController]
@@ -11,7 +12,15 @@ namespace CoreService_backend.Controllers
         [Route("registration")]
         public void Registration([FromBody] Models.User user)
         {
-         _users.Add(new Models.User(user.Email,user.Name,user.Password,user.PasswordConfirmation));
+            try
+            {
+                Log.Information("Registering new user");
+                _users.Add(new Models.User(user.Email, user.Name, user.Password, user.PasswordConfirmation));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in creating Order object.");
+            }
         }
 
         [HttpPost]

@@ -23,5 +23,18 @@ namespace CoreService_backend.Dao
         {
             return data;
         }
+
+        public List<Resource> GetResourcesForUserId(int userId)
+        {
+            List<Resource> resources = new List<Resource>();
+            foreach(var resource in GetAll())
+            {
+                if (resource.UserId == userId)
+                    {
+                    resources.Add(resource);
+                }
+            }
+            return resources;
+        }
 }
 }

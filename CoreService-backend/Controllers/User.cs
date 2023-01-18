@@ -6,18 +6,26 @@ namespace CoreService_backend.Controllers
     [Route("[controller]")]
     public class User : ControllerBase
     {
-        UserDao users = new UserDao();
+        private UserDao _users = new UserDao();
         [HttpPost]
         [Route("registration")]
         public void Registration([FromBody] Models.User user)
         {
-         users.Add(user);
+         _users.Add(new Models.User(user.Email,user.Name,user.Password,user.PasswordConfirmation));
         }
+
         [HttpPost]
         [Route("login")]
         public void Login([FromBody] Models.User user)
         {
-            users.CheckLogin(user);
+            _users.CheckLogin(user);
+        }
+
+        [HttpPost]
+        [Route("changelogin)]
+        public void ChangeLogin([FromBody] Models.User user)
+        {
+            _users.UpdateLogin(user);
         }
     }
 }

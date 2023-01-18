@@ -6,7 +6,6 @@ namespace CoreService_backend.Dao
         private List<Resource> data = new();
         public void Add(Resource resource)
         {
-            resource.Id = data.Count + 1;
             data.Add(resource);
         }
 

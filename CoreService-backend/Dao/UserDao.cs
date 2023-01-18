@@ -6,7 +6,6 @@ namespace CoreService_backend.Dao
         private List<User> data = new();
         public void Add(User user)
         {
-            user.Id = data.Count + 1;
             data.Add(user);
         }
 
@@ -28,12 +27,16 @@ namespace CoreService_backend.Dao
         {
             foreach (var user in data)
             {
-                if (user.name == login.name && user.password == login.password)
+                if (user.Name == login.Name && user.Password == login.Password)
                         {
                     return true;
                 }
             }
             return false;
+        }
+        public void UpdateLogin(User user)
+        {
+            data.Find(x => x.Id == user.Id).Name = user.Name;
         }
     }
 }

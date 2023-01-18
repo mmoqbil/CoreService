@@ -38,5 +38,9 @@ namespace CoreService_backend.Dao
         {
             data.Find(x => x.Id == user.Id).Name = user.Name;
         }
+        public void UpdatePassword(User user)
+        {
+            data.Find(x => x.Id == user.Id).Password = user.Password;
+        }
     }
 }

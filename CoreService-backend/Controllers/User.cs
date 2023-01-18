@@ -22,10 +22,17 @@ namespace CoreService_backend.Controllers
         }
 
         [HttpPost]
-        [Route("changelogin)]
+        [Route("changelogin")]
         public void ChangeLogin([FromBody] Models.User user)
         {
             _users.UpdateLogin(user);
+        }
+
+        [HttpPost]
+        [Route("changepassword")]
+        public void ChangePassword([FromBody] Models.User user)
+        {
+            _users.UpdatePassword(user);
         }
     }
 }

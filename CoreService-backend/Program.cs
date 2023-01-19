@@ -1,6 +1,6 @@
 using CoreService_backend.Services;
 using Microsoft.EntityFrameworkCore;
-//using Serilog;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +14,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MyDbContext>(options =>
             options.UseSqlServer(
                 builder.Configuration.GetConnectionString("CoreServiceConnection")));
-var app = builder.Build();
-/*var logger = new LoggerConfiguration()
+var logger = new LoggerConfiguration()
   .ReadFrom.Configuration(builder.Configuration)
   .Enrich.FromLogContext()
   .CreateLogger();
 builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);*/
+builder.Logging.AddSerilog(logger);
+var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

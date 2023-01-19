@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CoreService_backend.Dao;
-//using Serilog;
+using Serilog;
 namespace CoreService_backend.Controllers
 {
     [ApiController]
@@ -14,12 +14,12 @@ namespace CoreService_backend.Controllers
         {
             try
             {
-                //Log.Information("Registering new user");
+                Log.Information("Registering new user");
                 _users.Add(new Models.User(user.Email, user.Name, user.Password, user.PasswordConfirmation));
             }
             catch (Exception ex)
             {
-               // Log.Error(ex, "Error in creating Order object.");
+                Log.Error(ex, "Error in creating Order object.");
             }
         }
 
@@ -29,12 +29,12 @@ namespace CoreService_backend.Controllers
         {
             try
             {
-                //Log.Information("Trying to login");
+                Log.Information("Trying to login");
                 _users.CheckLogin(user);
             }
             catch (Exception ex)
             {
-                //Log.Error(ex, "Error with login");
+                Log.Error(ex, "Error with login");
             }
         }
 
@@ -44,12 +44,12 @@ namespace CoreService_backend.Controllers
         {
             try
             {
-                //Log.Information("Trying to change login");
+                Log.Information("Trying to change login");
                 _users.UpdateLogin(user);
             }
             catch(Exception ex)
             {
-                //Log.Error(ex, "Error with changing login");
+                Log.Error(ex, "Error with changing login");
             }
         }
 
@@ -59,12 +59,12 @@ namespace CoreService_backend.Controllers
         {
             try
             {
-                //Log.Information("Trying to change password");
+                Log.Information("Trying to change password");
                 _users.UpdatePassword(user);
             }
             catch(Exception ex)
             {
-                //Log.Error(ex, "Error with changing password");
+                Log.Error(ex, "Error with changing password");
             }
         }
     }

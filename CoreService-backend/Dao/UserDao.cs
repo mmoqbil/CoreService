@@ -19,6 +19,7 @@ namespace CoreService_backend.Dao
             return data.Find(x => x.Id == id);
         }
 
+
         public IEnumerable<User> GetAll()
         {
             return data;

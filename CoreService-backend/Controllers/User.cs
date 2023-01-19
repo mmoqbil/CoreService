@@ -16,6 +16,11 @@ namespace CoreService_backend.Controllers
             {
                 //Log.Information("Registering new user");
                 _users.Add(new Models.User(user.Email, user.Name, user.Password, user.PasswordConfirmation));
+                var data = _users.GetAll();
+                foreach (var key in data)
+                {
+                    Console.WriteLine(key.Name);
+                }
             }
             catch (Exception ex)
             {

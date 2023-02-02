@@ -10,7 +10,7 @@ namespace CoreService_backend.Controllers
     {
         private ResourceDao _resource = new ResourceDao();
 
-        [HttpPost]
+        [HttpGet]
         [Route("resources")]
         public string GetResources()
         {
@@ -18,7 +18,7 @@ namespace CoreService_backend.Controllers
             return JsonConvert.SerializeObject(_resource);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("userresources")]
         public string GetUserResources([FromBody] Models.User user)
         {

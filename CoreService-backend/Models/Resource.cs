@@ -1,18 +1,26 @@
-﻿namespace CoreService_backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CoreService_backend.Models
 {
     public class Resource
     {
-        public int Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
+        [Required]
+        [MaxLength(256)]
         public string Name { get; set; }
+        [Required]
+        [MaxLength(256)]
         public string IpAdress { get; set; }
-        public int UserId { get; set; }
-        private static int _nextId = 0;
-        public Resource(string name, string ipAdress, int userId)
+        [Required]
+        [ForeignKey(nameof(User))]
+        public Guid UserId { get; set; }
+        public Resource(string name, string ipAdress, Guid userId)
         {
             Name = name;
             IpAdress = ipAdress;
             UserId = userId;
-            Id = Interlocked.Increment(ref _nextId);
         }
     }
 }

@@ -9,10 +9,19 @@ namespace CoreService_backend.Services
             _dbContext = dbContext;
         }
 
-        public void Save(User user)
+        public void CreateUser(User user)
         {
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
         }
+        public void UpdateUser(User user)
+        {
+            _dbContext.Users.Update(user);
+        }
+        public IEnumerable<User> GetUsers() =>
+        _dbContext.Users.ToList();
+
+        public User? GetUserById(Guid id) =>
+        _dbContext.Users.FirstOrDefault(b => b.Id == id);
     }
 }

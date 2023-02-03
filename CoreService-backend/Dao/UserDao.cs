@@ -11,13 +11,13 @@ namespace CoreService_backend.Dao
 
         public void Remove(int id)
         {
-            data.Remove(Get(id));
+           // data.Remove(Get(id));
         }
 
-        public User Get(int id)
-        {
-            return data.Find(x => x.Id == id);
-        }
+        //public User Get(int id)
+        //{
+            //return data.Find(x => x.Id == id);
+        //}
 
 
         public IEnumerable<User> GetAll()

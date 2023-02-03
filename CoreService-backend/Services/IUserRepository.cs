@@ -3,6 +3,10 @@ namespace CoreService_backend.Services
 {
     public interface IUserRepository
     {
-        void Save(User user);
+        IEnumerable<User> GetUsers();
+        void CreateUser(User user);
+        void UpdateUser(User book);
+        User? GetUserById(Guid id);
+        bool SaveChanges();
     }
 }

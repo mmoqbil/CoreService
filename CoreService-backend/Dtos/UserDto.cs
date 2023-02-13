@@ -5,16 +5,19 @@ namespace CoreService_backend.Dtos
     public class UserForCreationDto
     {
         [Required]
-        [MaxLength(512)]
+        [MaxLength(52)]
         public string Email { get; set; }
+
         [Required]
-        [MaxLength(512)]
+        [MaxLength(52)]
         public string Name { get; set; }
+
         [Required]
-        [MaxLength(512)]
+        [MaxLength(128)]
         public string Password { get; set; }
+
         [Required]
-        [MaxLength(512)]
+        [MaxLength(128)]
         public string PasswordConfirmation { get; set; }
     }
     public class UserForUpdateDto : UserForCreationDto
@@ -23,11 +26,12 @@ namespace CoreService_backend.Dtos
 
     public class BookForBulkUpdateDto : UserForUpdateDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
+
     public class UserDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }

@@ -21,16 +21,12 @@ namespace CoreService_backend.Models
         [MaxLength(512)]
         public string Password { get; set; }
 
-        [Required]
-        [MaxLength(512)]
-        public string PasswordConfirmation { get; set; }
 
-        public User(int Id, string email, string name, string password, string passwordConfirmation)
+        public User(int Id, string email, string name, string password)
         {
             Email = email;
             Name = name;
             Password = password;
-            PasswordConfirmation = passwordConfirmation;
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using CoreService_backend.Dtos;
+using CoreService_backend.Models;
+
 namespace CoreService_backend.Services
 {
     public interface IUserService
     {
-        IEnumerable<UserDto> GetUsers();
-        UserDto GetUserById(Guid userId);
-        (Guid, UserForCreationDto) CreateUser(UserForCreationDto userDto);
-        void UpdateUser(Guid userId, UserForUpdateDto userDto);
+        Task<IEnumerable<User>?> GetUsers();
+        Task<User?> GetUserById(int userId);
+        (int, User) CreateUser(User user);
+        void UpdateUser(User user);
     }
 }

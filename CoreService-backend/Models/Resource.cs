@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoreService_backend.Models
 {
+    [Table("Resources")]
     public class Resource
     {
         [Key]
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         [Required]
         [MaxLength(256)]
         public string Name { get; set; }
@@ -15,8 +17,8 @@ namespace CoreService_backend.Models
         public string IpAdress { get; set; }
         [Required]
         [ForeignKey(nameof(User))]
-        public Guid UserId { get; set; }
-        public Resource(string name, string ipAdress, Guid userId)
+        public int UserId { get; set; }
+        public Resource(string name, string ipAdress, int userId)
         {
             Name = name;
             IpAdress = ipAdress;

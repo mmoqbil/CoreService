@@ -1,3 +1,4 @@
+using CoreService_backend.Configurations.Extensions;
 using CoreService_backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -9,9 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
-builder.Services.AddDbContext<MyDbContext>(options =>
-            options.UseSqlServer(
-                builder.Configuration.GetConnectionString("CoreServiceConnection")));
+builder.Services.AddPersistence(builder.Configuration);
+
 var logger = new LoggerConfiguration()
   .ReadFrom.Configuration(builder.Configuration)
   .Enrich.FromLogContext()

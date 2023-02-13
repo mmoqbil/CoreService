@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CoreService_backend.Dao;
+﻿using CoreService_backend.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 
 namespace CoreService_backend.Controllers
@@ -8,7 +9,7 @@ namespace CoreService_backend.Controllers
     [Route("[controller]")]
     public class Resource : ControllerBase
     {
-        private ResourceDao _resource = new ResourceDao();
+        private IResourceService _resource;
 
         [HttpGet]
         [Route("resources")]

@@ -1,10 +1,13 @@
 ﻿using CoreService_backend.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace CoreService_backend.Services
 {
     public class UserRepository : IUserRepository
     {
-        private readonly MyDbContext _dbContext;
-        public UserRepository(MyDbContext dbContext)
+        private readonly CoreServiceContext _dbContext;
+
+        public UserRepository(CoreServiceContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -12,16 +15,30 @@ namespace CoreService_backend.Services
         public void CreateUser(User user)
         {
             _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
         }
+
+
         public void UpdateUser(User user)
         {
             _dbContext.Users.Update(user);
         }
-        public IEnumerable<User> GetUsers() =>
-        _dbContext.Users.ToList();
 
-        public User? GetUserById(Guid id) =>
-        _dbContext.Users.FirstOrDefault(b => b.Id == id);
+
+        public async Task<IEnumerable<User>?> GetUsers()
+        {
+            return await _dbContext.Users.AsNoTracking().ToListAsync();
+        }
+
+
+        public async Task<User?> GetUserById(int id)
+        {
+            return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+
+        public async Task<bool> SaveChanges()
+        {
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

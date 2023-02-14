@@ -15,16 +15,13 @@ namespace CoreService_backend.Dtos
         [Required]
         [MaxLength(128)]
         public string Password { get; set; }
-
-        [Required]
-        [MaxLength(128)]
-        public string PasswordConfirmation { get; set; }
     }
+
     public class UserForUpdateDto : UserForCreationDto
     {
     }
 
-    public class BookForBulkUpdateDto : UserForUpdateDto
+    public class UserForBulkUpdateDto : UserForUpdateDto
     {
         public int Id { get; set; }
     }
@@ -35,6 +32,5 @@ namespace CoreService_backend.Dtos
         public string Email { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
-        public string PasswordConfirmation { get; set; }
     }
 }

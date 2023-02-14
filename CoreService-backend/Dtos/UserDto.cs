@@ -4,16 +4,10 @@ namespace CoreService_backend.Dtos
 {
     public class UserForCreationDto
     {
-        [Required]
-        [MaxLength(52)]
         public string Email { get; set; }
 
-        [Required]
-        [MaxLength(52)]
         public string Name { get; set; }
 
-        [Required]
-        [MaxLength(128)]
         public string Password { get; set; }
     }
 

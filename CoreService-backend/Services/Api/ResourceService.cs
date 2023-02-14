@@ -1,7 +1,7 @@
 ﻿using CoreService_backend.Dtos;
-using CoreService_backend.Models;
+using CoreService_backend.Enitities;
 
-namespace CoreService_backend.Services
+namespace CoreService_backend.Services.Api
 {
     public class ResourceService : IResourceService
     {

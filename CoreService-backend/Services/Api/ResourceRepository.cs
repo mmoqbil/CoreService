@@ -1,7 +1,8 @@
-﻿using CoreService_backend.Models;
+﻿using CoreService_backend.DataAccess.DbContext;
+using CoreService_backend.Enitities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreService_backend.Services
+namespace CoreService_backend.Services.Api
 {
     public class ResourceRepository : IResourceRepository
     {

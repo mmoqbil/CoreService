@@ -1,5 +1,6 @@
-﻿using CoreService_backend.Models;
-namespace CoreService_backend.Services
+﻿using CoreService_backend.Enitities;
+
+namespace CoreService_backend.Services.Api
 {
     public interface IUserRepository
     {

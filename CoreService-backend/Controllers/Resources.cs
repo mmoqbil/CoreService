@@ -1,4 +1,5 @@
-﻿using CoreService_backend.Services;
+﻿using CoreService_backend.Enitities;
+using CoreService_backend.Services.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
@@ -7,7 +8,7 @@ namespace CoreService_backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class Resource : ControllerBase
+    public class Resources : ControllerBase
     {
         private IResourceService _resource;
 
@@ -21,7 +22,7 @@ namespace CoreService_backend.Controllers
 
         [HttpGet]
         [Route("userresources")]
-        public string GetUserResources([FromBody] Models.User user)
+        public string GetUserResources([FromBody] User user)
         {
           //  _resource.GetResourcesForUserId(user.Id);
             return JsonConvert.SerializeObject(_resource);

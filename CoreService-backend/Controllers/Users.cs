@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using CoreService_backend.Dtos;
-using CoreService_backend.Models;
-using CoreService_backend.Services;
+using CoreService_backend.Services.Api;
 
 namespace CoreService_backend.Controllers
 {
@@ -21,7 +20,7 @@ namespace CoreService_backend.Controllers
 
         [HttpPost]
         [Route("registration")]
-        public IActionResult Registration([FromBody] User user)
+        public IActionResult Registration([FromBody] UserForCreationDto user)
         {
             var (userId, createdUserDto) = _usersService.CreateUser(user);
 
@@ -32,9 +31,9 @@ namespace CoreService_backend.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            var usersDto = _usersService.GetUsers();
+            var usersDto = await _usersService.GetUsers();
 
             return Ok(usersDto);
         }
@@ -43,9 +42,9 @@ namespace CoreService_backend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UserDto> GetUser(int userId)
+        public async Task<ActionResult<UserDto>> GetUser(int userId)
         {
-            var userDto = _usersService.GetUserById(userId);
+            var userDto = await _usersService.GetUserById(userId);
 
             return Ok(userDto);
         }

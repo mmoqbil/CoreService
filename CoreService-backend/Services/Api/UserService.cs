@@ -1,15 +1,18 @@
-﻿using CoreService_backend.Models;
+﻿using AutoMapper;
 using CoreService_backend.Dtos;
+using CoreService_backend.Enitities;
 
-namespace CoreService_backend.Services
+namespace CoreService_backend.Services.Api
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repository)
+        public UserService(IUserRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
 
@@ -19,8 +22,10 @@ namespace CoreService_backend.Services
         }
 
 
-        public (int, User) CreateUser(User user)
+        public (int, User) CreateUser(UserForCreationDto userDto)
         {
+            var user = _mapper.Map<User>(userDto);
+
             _repository.CreateUser(user);
             _repository.SaveChanges();
 
@@ -28,8 +33,11 @@ namespace CoreService_backend.Services
         }
 
 
-        public async void UpdateUser(User user)
+        public async void UpdateUser(int userId, UserForUpdateDto userDto)
         {
+            var user = await _repository.GetUserById(userId);
+            _mapper.Map(userDto, user);
+
             _repository.UpdateUser(user);
             await _repository.SaveChanges();
         }

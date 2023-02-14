@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CoreService_backend.Models
+namespace CoreService_backend.Enitities
 {
     [Table("Users")]
     public class User
@@ -21,12 +21,8 @@ namespace CoreService_backend.Models
         [MaxLength(512)]
         public string Password { get; set; }
 
+        public List<Resource> Resources { get; set; }
 
-        public User(int Id, string email, string name, string password)
-        {
-            Email = email;
-            Name = name;
-            Password = password;
-        }
+        //Czy podczas tworzenia Resourca należy dodać do odpowiedniego obiektu User, nowo utworzony Resource?
     }
 }

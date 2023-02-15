@@ -22,7 +22,5 @@ namespace CoreService_backend.Enitities
         public string Password { get; set; }
 
         public List<Resource> Resources { get; set; }
-
-        //Czy podczas tworzenia Resourca należy dodać do odpowiedniego obiektu User, nowo utworzony Resource?
     }
 }

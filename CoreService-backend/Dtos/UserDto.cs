@@ -13,6 +13,7 @@ namespace CoreService_backend.Dtos
 
     public class UserForUpdateDto : UserForCreationDto
     {
+
     }
 
     public class UserForBulkUpdateDto : UserForUpdateDto

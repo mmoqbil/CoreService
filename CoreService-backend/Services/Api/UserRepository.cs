@@ -18,6 +18,10 @@ namespace CoreService_backend.Services.Api
             _dbContext.Users.Add(user);
         }
 
+        public async Task<User?> GetUserWithReources(int id)
+        {
+            return await _dbContext.Users.Include(u => u.Resources).FirstOrDefaultAsync(u => u.Id == id);
+        }
 
         public void UpdateUser(User user)
         {

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CoreServicebackend.Migrations
 {
-    [DbContext(typeof(CoreServiceContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20230214110359_AddRepeatPropertyToResource")]
     partial class AddRepeatPropertyToResource
     {

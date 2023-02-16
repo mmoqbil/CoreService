@@ -6,9 +6,9 @@ namespace CoreService_backend.Services.Api
 {
     public class UserRepository : IUserRepository
     {
-        private readonly CoreServiceContext _dbContext;
+        private readonly AppDbContext _dbContext;
 
-        public UserRepository(CoreServiceContext dbContext)
+        public UserRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

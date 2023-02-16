@@ -6,9 +6,9 @@ namespace CoreService_backend.Services.Api
 {
     public class ResourceRepository : IResourceRepository
     {
-        private readonly CoreServiceContext _context;
+        private readonly AppDbContext _context;
 
-        public ResourceRepository(CoreServiceContext context)
+        public ResourceRepository(AppDbContext context)
         {
             _context = context;
         }

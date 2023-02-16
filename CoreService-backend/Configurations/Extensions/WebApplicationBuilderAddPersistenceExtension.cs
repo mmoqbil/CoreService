@@ -8,7 +8,7 @@ namespace CoreService_backend.Configurations.Extensions
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<CoreServiceContext>(opt =>
+            services.AddDbContext<AppDbContext>(opt =>
                 {
                     opt.UseSqlServer(configuration.GetConnectionString("CoreServiceConnection"));
                 }

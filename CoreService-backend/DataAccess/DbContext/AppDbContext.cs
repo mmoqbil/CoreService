@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoreService_backend.DataAccess.DbContext
 {
-    public class CoreServiceContext : Microsoft.EntityFrameworkCore.DbContext
+    public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Resource> Resources { get; set; }
@@ -12,7 +12,7 @@ namespace CoreService_backend.DataAccess.DbContext
         private readonly string? _connectionString =
             "Server = (localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
 
-        public CoreServiceContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions options) : base(options)
         {
         }
 

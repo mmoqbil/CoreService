@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CoreServicebackend.Migrations
 {
-    [DbContext(typeof(CoreServiceContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20230214104342_InitializateDatabaseWithData")]
     partial class InitializateDatabaseWithData
     {

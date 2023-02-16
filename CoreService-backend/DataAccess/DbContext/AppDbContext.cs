@@ -1,10 +1,11 @@
 ﻿using CoreService_backend.Enitities;
 using CoreService_backend.Services.DbConfiguration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoreService_backend.DataAccess.DbContext
 {
-    public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Resource> Resources { get; set; }

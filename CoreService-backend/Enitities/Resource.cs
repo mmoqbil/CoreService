@@ -17,9 +17,9 @@ namespace CoreService_backend.Enitities
         [MaxLength(256)]
         public string IpAdress { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        //[Required]
+        //[ForeignKey(nameof(User))]
+        //public int UserId { get; set; }
 
         public TimeSpan Repeat { get; set; }
     }

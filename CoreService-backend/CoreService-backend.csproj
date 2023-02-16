@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DataAccess\Migrations\" />
     <Folder Include="Services\Auth\" />
   </ItemGroup>
 

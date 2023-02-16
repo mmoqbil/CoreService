@@ -7,7 +7,6 @@ namespace CoreService_backend.DataAccess.DbContext
 {
     public class AppDbContext : IdentityDbContext
     {
-        public DbSet<User> Users { get; set; }
         public DbSet<Resource> Resources { get; set; }
 
         private readonly string? _connectionString =
@@ -32,8 +31,8 @@ namespace CoreService_backend.DataAccess.DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ResourceConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
     }
 }

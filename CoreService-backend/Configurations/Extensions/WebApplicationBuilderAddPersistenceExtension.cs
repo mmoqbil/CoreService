@@ -14,9 +14,6 @@ namespace CoreService_backend.Configurations.Extensions
                 }
                 );
 
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
-
             services.AddScoped<IResourceRepository, ResourceRepository>();
             services.AddScoped<IResourceService, ResourceService>();
 

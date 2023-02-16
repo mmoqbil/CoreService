@@ -1,4 +1,5 @@
-﻿using CoreService_backend.Enitities;
+﻿using CoreService_backend.Dtos;
+using CoreService_backend.Enitities;
 using CoreService_backend.Services.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -22,7 +23,7 @@ namespace CoreService_backend.Controllers
 
         [HttpGet]
         [Route("userresources")]
-        public string GetUserResources([FromBody] User user)
+        public string GetUserResources([FromBody] UserLoginRequestDto user)
         {
           //  _resource.GetResourcesForUserId(user.Id);
             return JsonConvert.SerializeObject(_resource);

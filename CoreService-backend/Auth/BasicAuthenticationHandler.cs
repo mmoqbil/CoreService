@@ -2,6 +2,7 @@
 using CoreService_backend.Services.Api;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -11,17 +12,17 @@ namespace CoreService_backend.Auth
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private readonly IUserService _userService;
+        private readonly UserManager<IdentityUser> _userService;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IUserService userService)
+            UserManager<IdentityUser> userManager)
             : base(options, logger, encoder, clock)
         {
-            _userService = userService;
+            _userService = userManager;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -45,7 +46,7 @@ namespace CoreService_backend.Auth
                 var email = userInfoDecoded.Split(":")[0];
                 var password = userInfoDecoded.Split(":")[1];
 
-                var user = await _userService.FindCurrentUser(email, password);
+                var user = await _userService.FindByEmailAsync(email);
 
                 if (user == null)
                 {
@@ -54,7 +55,7 @@ namespace CoreService_backend.Auth
 
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.UserName)
                 };
 
                 var identity = new ClaimsIdentity(claims, Scheme.Name);

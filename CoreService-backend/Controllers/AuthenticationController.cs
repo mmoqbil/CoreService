@@ -48,31 +48,33 @@ namespace CoreService_backend.Controllers
 
                 // create new user
 
-                var new_user = new IdentityUser()
+                var newUser = new IdentityUser()
                 {
                     Email = requestDto.Email,
-                    UserName = requestDto.Name
+                    UserName = requestDto.Name,
                 };
 
-                var is_created = await _userManager.CreateAsync(new_user, requestDto.Password);
+                var is_created = await _userManager.CreateAsync(newUser, requestDto.Password);
 
                 if (is_created.Succeeded)
                 {
-                    // Generate new token
-                    var token = GenerateJwtToken(new_user);
+                    await _userManager.AddToRoleAsync(newUser, "user");
+                    var roles = await _userManager.GetRolesAsync(newUser);
 
+                    // Generate new token
+                    var token = GenerateJwtToken(newUser, roles);
 
                     // result 200 
                     return Ok(new AuthResult()
                     {
                         Result = true,
-                        Token = token,
+                        Token = token,  
                     });
                 }
 
                 // bad request from create new user on database
 
-                var errors = is_created.Errors.ToList(); // How to get in to is_created {Failed: ...} ? 
+                var errors = is_created.Errors.ToList(); // How to get into is_created {Failed: ...} ? 
 
                 return BadRequest(new AuthResult()
                 {
@@ -106,24 +108,25 @@ namespace CoreService_backend.Controllers
                 return Unauthorized(userDto);
             }
 
+            var roles = await _userManager.GetRolesAsync(user);
+
             return Ok(new AuthResult()
             {
                 Result = true,
-                Token = GenerateJwtToken(user)
+                Token = GenerateJwtToken(user, roles)
             });
         }
 
 
 
-        private string GenerateJwtToken(IdentityUser user)
+        private string GenerateJwtToken(IdentityUser user, IList<string> roles)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-            //var secretKey = JwtConfig.Secret;
 
             var key = Encoding.UTF8.GetBytes(_config.Value.Secret);
 
-            //var roles = await _userManager.GetRolesAsync(user); <- why it doesn't work? 
+            // var roles = await _userManager.GetRolesAsync(user); // Why it doesn't work? 
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
@@ -133,8 +136,7 @@ namespace CoreService_backend.Controllers
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString()),
-                    new Claim(ClaimTypes.Role, "User") // default role for everyone is User
-                    // How to add in DB new rules for users? 
+                    new Claim(ClaimTypes.Role, string.Join(",", roles))
                 }),
 
                 Expires = DateTime.Now.AddHours(1),
@@ -151,6 +153,5 @@ namespace CoreService_backend.Controllers
 
             return jwtToken;
         }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CoreService_backend.Enitities;
 using CoreService_backend.Services.DbConfiguration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

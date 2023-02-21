@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace CoreService_backend.Enitities
 {
@@ -16,6 +17,11 @@ namespace CoreService_backend.Enitities
         [Required]
         [MaxLength(256)]
         public string IpAdress { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(IdentityUser))]
+        public string UserId { get; set; }
+
 
         //[Required]
         //[ForeignKey(nameof(User))]

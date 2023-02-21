@@ -6,18 +6,18 @@ namespace CoreService_backend.Configurations.Extensions
 {
     public static class WebApplicationBuilderAddPersistenceExtension
     {
-        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+        public static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
         {
-            services.AddDbContext<AppDbContext>(opt =>
+            builder.Services.AddDbContext<AppDbContext>(opt =>
                 {
-                    opt.UseSqlServer(configuration.GetConnectionString("CoreServiceConnection"));
+                    opt.UseSqlServer(builder.Configuration.GetConnectionString("CoreServiceConnection"));
                 }
                 );
 
-            services.AddScoped<IResourceRepository, ResourceRepository>();
-            services.AddScoped<IResourceService, ResourceService>();
+            builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
+            builder.Services.AddScoped<IResourceService, ResourceService>();
 
-            return services;
+            return builder;
         }
     }
 }

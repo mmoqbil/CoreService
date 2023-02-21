@@ -13,9 +13,9 @@ namespace CoreService_backend.Services.Api
         }
 
 
-        public async Task<IEnumerable<Resource>?> GetResource()
+        public async Task<IEnumerable<Resource>?> GetResources()
         {
-            return await _repository.GetResource();
+            return await _repository.GetResources();
         }
 
         public async Task<Resource?> GetResourceById(int resourceId)

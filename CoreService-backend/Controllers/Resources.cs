@@ -14,18 +14,17 @@ namespace CoreService_backend.Controllers
         private IResourceService _resource;
 
         [HttpGet]
-        [Route("resources")]
-        public string GetResources()
+        public async Task<IEnumerable<Resource>?> GetResources()
         {
-           // _resource.Add(new Models.Resource("FirstResource","127.0.0",1));
-            return JsonConvert.SerializeObject(_resource);
+            return await _resource.GetResources();
         }
 
         [HttpGet]
-        [Route("userresources")]
-        public string GetUserResources([FromBody] UserLoginRequestDto user)
+        [Route("/{idUser:int}")]
+        public async Task<IEnumerable<Resource>?> GetUserResources(int idUser)
         {
-          //  _resource.GetResourcesForUserId(user.Id);
+            // add validation user Authentication
+
             return JsonConvert.SerializeObject(_resource);
         }
     }

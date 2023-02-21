@@ -13,7 +13,7 @@ namespace CoreService_backend.Services.Api
             _context = context;
         }
 
-        public async Task<IEnumerable<Resource>?> GetResource()
+        public async Task<IEnumerable<Resource>?> GetResources()
         {
             return await _context.Resources.AsNoTracking().ToListAsync();
         }

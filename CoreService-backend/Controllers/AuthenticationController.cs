@@ -82,6 +82,7 @@ namespace CoreService_backend.Controllers
 
 
         [HttpOptions]
+        [Route("Login")]
         public async Task<IActionResult> LoginApiUser([FromBody] UserLoginRequestDto userDto)
         {
             if (!ModelState.IsValid)

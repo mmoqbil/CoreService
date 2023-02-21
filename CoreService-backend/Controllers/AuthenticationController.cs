@@ -25,7 +25,7 @@ namespace CoreService_backend.Controllers
             _config = config;
         }
 
-        [HttpPost]
+        [HttpOptions]
         [Route("Register")]
         public async Task<IActionResult> RegisterApiUser([FromBody] UserRegistrationRequestDto requestDto)
         {
@@ -36,27 +36,22 @@ namespace CoreService_backend.Controllers
                 if (user_exist != null)
                 {
                     // user is allready exist with this email 
-                    return BadRequest(new AuthResult()
+                    return BadRequest(new AuthResult(false, new List<string>()
                     {
-                        Result = false,
-                        Errors = new List<string>()
-                        {
-                            "Email already exist"
-                        }
-                    });
+                        "Email already exist"
+                    }));
                 }
 
                 // create new user
-
                 var newUser = new IdentityUser()
                 {
                     Email = requestDto.Email,
                     UserName = requestDto.Name,
                 };
 
-                var is_created = await _userManager.CreateAsync(newUser, requestDto.Password);
+                var isCreated = await _userManager.CreateAsync(newUser, requestDto.Password);
 
-                if (is_created.Succeeded)
+                if (isCreated.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(newUser, "user");
                     var roles = await _userManager.GetRolesAsync(newUser);
@@ -65,31 +60,21 @@ namespace CoreService_backend.Controllers
                     var token = GenerateJwtToken(newUser, roles);
 
                     // result 200 
-                    return Ok(new AuthResult()
-                    {
-                        Result = true,
-                        Token = token,  
-                    });
+                    return Ok(new AuthResult(true, token));
                 }
 
                 // bad request from create new user on database
+                var errors = isCreated.Errors.ToList(); // How to get into is_created {Failed: ...} ? 
 
-                var errors = is_created.Errors.ToList(); // How to get into is_created {Failed: ...} ? 
-
-                return BadRequest(new AuthResult()
+                return BadRequest(new AuthResult(false, new List<string>()
                 {
-                    Errors = new List<string>()
-                    {
-                        "Server error",
-                        $"Error: {errors}"
-                    },
-                    Result = false
-
-                });
+                    "Server error",
+                    $"Error: {errors}"
+                }));
             }
-            // bad request because input is invalid 
 
-            return BadRequest();
+            // bad request because input is invalid 
+            return BadRequest(ModelState);
         }
 
 
@@ -98,6 +83,7 @@ namespace CoreService_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // bad request because input is invalid 
                 return BadRequest(ModelState);
             }
 
@@ -105,16 +91,13 @@ namespace CoreService_backend.Controllers
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, userDto.Password))
             {
+                // user doesn't exist or incorrect password
                 return Unauthorized(userDto);
             }
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            return Ok(new AuthResult()
-            {
-                Result = true,
-                Token = GenerateJwtToken(user, roles)
-            });
+            return Ok(new AuthResult(true, GenerateJwtToken(user, roles)));
         }
 
 

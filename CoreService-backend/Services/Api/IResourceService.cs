@@ -7,6 +7,7 @@ namespace CoreService_backend.Services.Api
     {
         Task<IEnumerable<Resource>?> GetResources();
         Task<Resource?> GetResourceById(int resourceId);
+        Task<IEnumerable<Resource>?> GetResourcesByUserID(int userID);
         Task<(int, Resource)> CreateResource(Resource Resource);
         Task UpdateResource(Resource Resource);
     }

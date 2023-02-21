@@ -33,6 +33,11 @@ namespace CoreService_backend.Services.Api
             return await _context.Resources.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<IEnumerable<Resource>?> GetResourcesByUserID(int userId)
+        {
+            return await _context.Resources.AsNoTracking().Where(r => r.)
+        }
+
         public async Task<bool> SaveChanges()
         {
             return await _context.SaveChangesAsync() > 0;

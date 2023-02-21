@@ -23,6 +23,11 @@ namespace CoreService_backend.Services.Api
             return await _repository.GetResourceById(resourceId);
         }
 
+        public async Task<IEnumerable<Resource>?> GetResourcesByUserID(int userID)
+        {
+            return await _repository.GetResourcesByUserID(userID);
+        }
+
         public async Task<(int, Resource)> CreateResource(Resource resource)
         {
             _repository.CreateResource(resource);

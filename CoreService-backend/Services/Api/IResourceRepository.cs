@@ -8,6 +8,7 @@ namespace CoreService_backend.Services.Api
         void CreateResource(Resource user);
         void UpdateResource(Resource book);
         Task<Resource?> GetResourceById(int id);
+        Task<IEnumerable<Resource>?> GetResourcesByUserID(int userId);
         Task<bool> SaveChanges();
     }
 }

@@ -5,5 +5,17 @@
         public string Token { get; set; }
         public bool Result { get; set; }
         public List<string> Errors { get; set; }
+
+        public AuthResult(bool result, List<string> errors)
+        {
+            Result = result;
+            Errors = errors;
+        }
+
+        public AuthResult(bool result, string token)
+        {
+            Token = token;
+            Result = result;
+        }
     }
 }

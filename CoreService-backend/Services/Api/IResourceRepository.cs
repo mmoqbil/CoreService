@@ -1,4 +1,5 @@
 ﻿using CoreService_backend.Enitities;
+using CoreService_backend.Models.Dtos;
 
 namespace CoreService_backend.Services.Api
 {
@@ -6,7 +7,7 @@ namespace CoreService_backend.Services.Api
     {
         Task<IEnumerable<Resource>?> GetResources();
         void CreateResource(Resource user);
-        void UpdateResource(Resource book);
+        void UpdateResource(ResourceUpdateDto book);
         Task<Resource?> GetResourceById(int id);
         Task<IEnumerable<Resource>?> GetResourcesByUserID(int userId);
         Task<bool> SaveChanges();

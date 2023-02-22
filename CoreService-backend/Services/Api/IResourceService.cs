@@ -1,5 +1,6 @@
 ﻿using CoreService_backend.Dtos;
 using CoreService_backend.Enitities;
+using CoreService_backend.Models.Dtos;
 
 namespace CoreService_backend.Services.Api
 {
@@ -9,6 +10,6 @@ namespace CoreService_backend.Services.Api
         Task<Resource?> GetResourceById(int resourceId);
         Task<IEnumerable<Resource>?> GetResourcesByUserID(int userID);
         Task<(int, Resource)> CreateResource(Resource Resource);
-        Task UpdateResource(Resource Resource);
+        Task UpdateResource(ResourceUpdateDto Resource);
     }
 }

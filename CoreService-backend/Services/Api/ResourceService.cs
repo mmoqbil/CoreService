@@ -1,5 +1,5 @@
-﻿using CoreService_backend.Dtos;
-using CoreService_backend.Enitities;
+﻿using CoreService_backend.Enitities;
+using CoreService_backend.Models.Dtos;
 
 namespace CoreService_backend.Services.Api
 {
@@ -11,7 +11,6 @@ namespace CoreService_backend.Services.Api
         {
             _repository = resourceRepository;
         }
-
 
         public async Task<IEnumerable<Resource>?> GetResources()
         {
@@ -36,7 +35,7 @@ namespace CoreService_backend.Services.Api
             return (resource.Id, resource);
         }
 
-        public async Task UpdateResource(Resource Resource)
+        public async Task UpdateResource(ResourceUpdateDto Resource)
         {
             _repository.UpdateResource(Resource);
             await _repository.SaveChanges();

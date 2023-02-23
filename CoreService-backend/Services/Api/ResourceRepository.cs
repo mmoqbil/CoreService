@@ -22,9 +22,16 @@ namespace CoreService_backend.Services.Api
             return await _context.Resources.AsNoTracking().ToListAsync();
         }
 
-        public void CreateResource(Resource resouce)
+        public void DeleteResource(Resource resource)
         {
-            _context.Resources.Add(resouce);
+            _context.Resources.Remove(resource);
+        }
+
+        public int CreateResource(ResourceDto resouceDto)
+        {
+            var resource = _mapper.Map<Resource>(resouceDto);
+            _context.Resources.Add(resource);
+            return resource.Id;
         }
 
         public void UpdateResource(ResourceUpdateDto updateResoucedto)

@@ -9,7 +9,8 @@ namespace CoreService_backend.Services.Api
         Task<IEnumerable<Resource>?> GetResources();
         Task<Resource?> GetResourceById(int resourceId);
         Task<IEnumerable<Resource>?> GetResourcesByUserID(int userID);
-        Task<(int, Resource)> CreateResource(Resource Resource);
+        Task<(int, ResourceDto)> CreateResource(ResourceDto Resource);
+        Task<bool> RemoveResource(int resourceId);
         Task UpdateResource(ResourceUpdateDto Resource);
     }
 }

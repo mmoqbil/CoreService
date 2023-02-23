@@ -12,7 +12,13 @@ namespace CoreService_backend.Controllers
     [Route("[controller]")]
     public class ResourceController : ControllerBase
     {
-        private IResourceService _resource;
+        private readonly IResourceService _resource;
+
+        public ResourceController(IResourceService resource)
+        {
+            _resource = resource;
+        }
+
 
         [HttpGet]
         public async Task<IEnumerable<Resource>?> GetResources()
@@ -21,28 +27,45 @@ namespace CoreService_backend.Controllers
         }
 
         [HttpGet]
-        [Route("/{userID:int}")]
-        public async Task<IEnumerable<Resource>?> GetUserResources(int userID)
+        [Route("/{userId:int}")]
+        public async Task<IEnumerable<Resource>?> GetUserResources(int userId)
         {
             // add validation user Authentication
-            return await _resource.GetResourcesByUserID(userID);
+            return await _resource.GetResourcesByUserID(userId);
         }
 
         [HttpGet]
-        [Route("/{userID:int}/{resourceID:int}")]
-        public async Task<Resource?> GetResource(int userID, int resourceID)
+        [Route("/{userId:int}/{resourceId:int}")]
+        public async Task<Resource?> GetResource(int userId, int resourceId)
         {
             // add validation user Authentication
 
-            return await _resource.GetResourceById(resourceID);
+            return await _resource.GetResourceById(resourceId);
         }
 
-        [HttpPost]
+        [HttpOptions]
         [Route("/{userID:int}/{resourceID:int}")]
         public async Task UpdateResource([FromBody] ResourceUpdateDto resource)
         {
             // add validation user Authentication
             await _resource.UpdateResource(resource);
         }
+
+        [HttpDelete]
+        [Route("/{userId:int}/{resourceId:int}")]
+        public async Task DeleteResource(int resourceId)
+        {
+            // add validation user Authentication
+            await _resource.RemoveResource(resourceId);
+        }
+
+        [HttpPost]
+        [Route("/{userId:int}/{resourceId:int}")]
+        public async Task CreateResource([FromBody] ResourceDto resource)
+        {
+            // add validation user Authentication
+            await _resource.CreateResource(resource);
+        }
+
     }
 }

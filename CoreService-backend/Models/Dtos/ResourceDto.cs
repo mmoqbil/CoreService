@@ -6,10 +6,6 @@ namespace CoreService_backend.Models.Dtos
 {
     public class ResourceDto
     {
-    }
-
-    public class ResourceUpdateDto
-    {
         [Required]
         [MaxLength(256)]
         public string Name { get; set; }
@@ -23,5 +19,9 @@ namespace CoreService_backend.Models.Dtos
 
         [Required]
         public TimeSpan Repeat { get; set; }
+    }
+
+    public class ResourceUpdateDto : ResourceDto
+    {
     }
 }

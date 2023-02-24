@@ -19,7 +19,6 @@ namespace CoreService_backend.Controllers
             _resource = resource;
         }
 
-
         [HttpGet]
         public async Task<IEnumerable<Resource>?> GetResources()
         {
@@ -66,6 +65,5 @@ namespace CoreService_backend.Controllers
             // add validation user Authentication
             await _resource.CreateResource(resource);
         }
-
     }
 }

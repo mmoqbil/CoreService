@@ -7,12 +7,12 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .Enrich.FromLogContext()
-    .WriteTo.Console()
+    .WriteTo.File(@"E:\CodeCool\Grande\serilog\LogFile.txt")  // TODO: Change to file .WriteTo.File(Path)
     .CreateLogger();
 
 try
 {
-    Log.Information("Starting up the service...");
+    Log.Information("Starting up the service");
     CreateHostBuilder(args).Build().Run();
 }
 catch (Exception ex)
@@ -28,6 +28,7 @@ finally
 
 static IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)
+        .UseWindowsService()
         .ConfigureServices(services =>
         {
             services.AddHostedService<Worker>();

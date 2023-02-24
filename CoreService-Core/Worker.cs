@@ -30,7 +30,7 @@ namespace CoreService_Core
 
                 if (result.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("The status code was: {statusCode}", result.StatusCode);
+                    _logger.LogInformation("The status code was: {statusCode}, time: {time}", result.StatusCode, DateTime.Now);
                 }
                 else
                 {

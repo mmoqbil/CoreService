@@ -17,30 +17,31 @@ namespace CoreService_backend.Services.Api
             return await _repository.GetResources();
         }
 
-        public async Task<Resource?> GetResourceById(int resourceId)
+        public async Task<Resource?> GetResourceById(string resourceId)
         {
             return await _repository.GetResourceById(resourceId);
         }
 
-        public async Task<IEnumerable<Resource>?> GetResourcesByUserID(int userId)
+        public async Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userId)
         {
             return await _repository.GetResourcesByUserID(userId);
         }
 
-        public async Task<(int, ResourceDto)> CreateResource(ResourceDto resourceDto)
+        public async Task<(string, ResourceDto)> CreateResource(ResourceDto resourceDto, string userId)
         {
-            var resourceId = _repository.CreateResource(resourceDto);
+            var resourceId = _repository.CreateResource(resourceDto, userId);
             await _repository.SaveChanges();
 
             return (resourceId, resourceDto);
         }
 
-        public async Task<bool> RemoveResource(int resourceId)
+        public async Task<bool> RemoveResource(string resourceId)
         {
             var resource = await _repository.GetResourceById(resourceId);
             if (resource != null)
             {
                 _repository.DeleteResource(resource);
+                await _repository.SaveChanges();
                 return true;
             }
 

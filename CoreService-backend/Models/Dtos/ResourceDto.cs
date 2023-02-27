@@ -15,13 +15,17 @@ namespace CoreService_backend.Models.Dtos
         public string IpAdress { get; set; }
 
         [Required]
-        public string UserId { get; set; }
-
-        [Required]
-        public TimeSpan Repeat { get; set; }
+        public int RepeatAfterSeconds { get; set; }
     }
 
     public class ResourceUpdateDto : ResourceDto
     {
+        [Required]
+        [Key]
+        public string Id { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(IdentityUser))]
+        public string UserId { get; set; }
     }
 }

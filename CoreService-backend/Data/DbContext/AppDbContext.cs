@@ -1,4 +1,5 @@
-﻿using CoreService_backend.Enitities;
+﻿using CoreService_backend.Configurations.DbConfiguration;
+using CoreService_backend.Enitities;
 using CoreService_backend.Services.DbConfiguration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -33,7 +34,9 @@ namespace CoreService_backend.DataAccess.DbContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new ResourceConfiguration());
+            //modelBuilder.ApplyConfiguration(new ResourceConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
         }
     }
 }

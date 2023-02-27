@@ -32,9 +32,6 @@ namespace CoreService_backend.Configurations.Extensions
                     };
                 });
 
-            builder.Services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
             return builder;
         }
     }

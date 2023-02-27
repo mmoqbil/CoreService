@@ -25,10 +25,7 @@ var logger = new LoggerConfiguration()
   .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
-var app = builder.Build();
-
-
-// Configure the HTTP request pipeline.
+var app = builder.Build();// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

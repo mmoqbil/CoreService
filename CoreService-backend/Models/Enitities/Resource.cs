@@ -8,7 +8,7 @@ namespace CoreService_backend.Enitities
     public class Resource
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [MaxLength(256)]

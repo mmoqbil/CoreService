@@ -18,10 +18,10 @@ namespace CoreService_backend.Controllers
     {
 
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly AuthenticationManager _authenticationManager;
+        private readonly IAuthenticationManager _authenticationManager;
         
 
-        public AuthenticationController(UserManager<IdentityUser> userManager, AuthenticationManager authenticationManager)
+        public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager)
         {
             _userManager = userManager;
             _authenticationManager = authenticationManager;
@@ -84,6 +84,29 @@ namespace CoreService_backend.Controllers
         [HttpOptions]
         [Route("Login")]
         public async Task<IActionResult> LoginApiUser([FromBody] UserLoginRequestDto userDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                // bad request because input is invalid 
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(userDto.Email);
+
+            if (user == null || !await _userManager.CheckPasswordAsync(user, userDto.Password))
+            {
+                // user doesn't exist or incorrect password
+                return Unauthorized(userDto);
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new AuthResult(true, _authenticationManager.GenerateJwtToken(user, roles)));
+        }
+
+        [HttpOptions]
+        [Route("DevLogin")]
+        public async Task<IActionResult> DevLoginApiUser([FromBody] UserLoginRequestDto userDto)
         {
             if (!ModelState.IsValid)
             {

@@ -6,19 +6,18 @@ using System.Security.Claims;
 using System.Text;
 using CoreService_backend.Configurations.Jwt;
 using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace CoreService_backend.Infrastructure
 {
     public class AuthenticationManager : IAuthenticationManager
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _configuration;
         private readonly IOptions<JwtConfig> _jwtConfig;
 
-        public AuthenticationManager(UserManager<IdentityUser> userManager, IConfiguration configuration, IOptions<JwtConfig> jwtConfig)
+        public AuthenticationManager(UserManager<IdentityUser> userManager, IOptions<JwtConfig> jwtConfig)
         {
             _userManager = userManager;
-            _configuration = configuration;
             _jwtConfig = jwtConfig;
         }
 
@@ -37,25 +36,24 @@ namespace CoreService_backend.Infrastructure
 
             // var roles = await _userManager.GetRolesAsync(user); // Why it doesn't work? 
 
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.UserName));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var subject = new ClaimsIdentity(claims);
+
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Name, user.UserName ),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString()),
-                    new Claim(ClaimTypes.Role, string.Join(",", roles))
-                }),
-
-                Expires = DateTime.Now.AddHours(1),
+                Subject = subject,
+                Expires = DateTime.Now.AddHours(2), //TODO: Chagne to 30 minuts
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
-
-            //foreach (var role in roles)
-            //{
-            //    tokenDescriptor.Subject.Claims.Append(new Claim(ClaimTypes.Role, role));
-            //}
 
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);

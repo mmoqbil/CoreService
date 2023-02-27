@@ -11,52 +11,52 @@ namespace CoreService_backend.Services.DbConfiguration
             builder.HasData(
                 new Resource
                 {
-                    Id = 1,
+                    Id = "1",
                     IpAdress = "127.0.0.1",
                     Name = "LocalHost",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 },
                 new Resource
                 {
-                    Id = 2,
+                    Id = "2",
                     IpAdress = "187.166.70.216",
                     Name = "My private website",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 },
                 new Resource
                 {
-                    Id = 3,
+                    Id = "3",
                     IpAdress = "40.214.147.21",
                     Name = "Some adress",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 },
                 new Resource
                 {
-                    Id = 4,
+                    Id = "4",
                     IpAdress = "26.252.235.19",
                     Name = "My email service",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 },
                 new Resource
                 {
-                    Id = 5,
+                    Id = "5",
                     IpAdress = "127.0.0.1",
                     Name = "Shop website",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 },
                 new Resource
                 {
-                    Id = 6,
+                    Id = "6",
                     IpAdress = "175.189.43.59",
                     Name = "Coffee website",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 },
                 new Resource
                 {
-                    Id = 7,
+                    Id = "7",
                     IpAdress = "148.143.234.67",
                     Name = "My car rent website",
-                    UserId = "5f3dc60d - b2eb - 4b86 - 883a - f1a45fe8e967",
+                    UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
                 }
             );
         }

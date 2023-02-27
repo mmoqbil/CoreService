@@ -24,11 +24,8 @@ namespace CoreServicebackend.Migrations
 
             modelBuilder.Entity("CoreService_backend.Enitities.Resource", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IpAdress")
                         .IsRequired()
@@ -43,60 +40,15 @@ namespace CoreServicebackend.Migrations
                     b.Property<TimeSpan>("Repeat")
                         .HasColumnType("time");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Resources");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IpAdress = "127.0.0.1",
-                            Name = "LocalHost",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IpAdress = "187.166.70.216",
-                            Name = "My private website",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IpAdress = "40.214.147.21",
-                            Name = "Some adress",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IpAdress = "26.252.235.19",
-                            Name = "My email service",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IpAdress = "127.0.0.1",
-                            Name = "Shop website",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IpAdress = "175.189.43.59",
-                            Name = "Coffee website",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IpAdress = "148.143.234.67",
-                            Name = "My car rent website",
-                            Repeat = new TimeSpan(0, 0, 0, 0, 0)
-                        });
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -124,6 +76,29 @@ namespace CoreServicebackend.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "4cbf76e9-e7b3-497e-a100-fddd1923b97a",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "91bfc23e-9fe2-4b03-8854-6a2781b85b3e",
+                            Name = "SuperUser",
+                            NormalizedName = "SUPERUSER"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            ConcurrencyStamp = "d99c9089-2633-41af-8ccc-ebfabe61cef6",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -214,6 +189,50 @@ namespace CoreServicebackend.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "7755a8cc-cf32-4eed-b5c5-e517c1d3f7f4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "81a4689a-6659-4735-aa78-9ca8ac9bbdda",
+                            Email = "johndoe@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ6dC5pppL2xGssQVupGP1TuosGNMfq3n39pmYeC1xM7KsNrVhxDsGWHFYUgro7pAA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a454993f-c282-47f0-8e09-38ce2f1a0a34",
+                            TwoFactorEnabled = false,
+                            UserName = "johndoe"
+                        },
+                        new
+                        {
+                            Id = "bbfe92d2-11f2-43e5-a11b-face097bd67a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d77542b1-186d-469a-914d-44259d55a7f9",
+                            Email = "adam@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAEAACcQAAAAEPllPeLsdpeuJV2bdBw2kSXdWthr0la6VXOW4qaXDM5ZblrVjBHGn5UaNiuyc0pTXQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "fd3848d6-5189-4827-b5e9-fe536151a125",
+                            TwoFactorEnabled = false,
+                            UserName = "Adam"
+                        },
+                        new
+                        {
+                            Id = "25113f09-a179-4da2-912f-14d067b9e26e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "426f6f3c-ed78-457d-bf04-b9dfcb406dc5",
+                            Email = "judasz@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAEAACcQAAAAEPxsnrz1E1mPKMKNIs0L3c1LaXZ/fSiVsiIBtkAR0u9ey2PImF+waSXWTLglgiBTJQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "1bd85f71-aa02-43cd-b6f2-6da80ba2fe64",
+                            TwoFactorEnabled = false,
+                            UserName = "Judasz"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -299,6 +318,17 @@ namespace CoreServicebackend.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CoreService_backend.Enitities.Resource", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

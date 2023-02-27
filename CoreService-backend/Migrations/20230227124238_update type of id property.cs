@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoreServicebackend.Migrations
 {
     /// <inheritdoc />
-    public partial class Changedatabasetoidentitydatabse : Migration
+    public partial class updatetypeofidproperty : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,21 +50,6 @@ namespace CoreServicebackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Resources",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    IpAdress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Repeat = table.Column<TimeSpan>(type: "time", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Resources", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,18 +158,45 @@ namespace CoreServicebackend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    IpAdress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Repeat = table.Column<TimeSpan>(type: "time", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Resources_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
-                table: "Resources",
-                columns: new[] { "Id", "IpAdress", "Name", "Repeat" },
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "127.0.0.1", "LocalHost", new TimeSpan(0, 0, 0, 0, 0) },
-                    { 2, "187.166.70.216", "My private website", new TimeSpan(0, 0, 0, 0, 0) },
-                    { 3, "40.214.147.21", "Some adress", new TimeSpan(0, 0, 0, 0, 0) },
-                    { 4, "26.252.235.19", "My email service", new TimeSpan(0, 0, 0, 0, 0) },
-                    { 5, "127.0.0.1", "Shop website", new TimeSpan(0, 0, 0, 0, 0) },
-                    { 6, "175.189.43.59", "Coffee website", new TimeSpan(0, 0, 0, 0, 0) },
-                    { 7, "148.143.234.67", "My car rent website", new TimeSpan(0, 0, 0, 0, 0) }
+                    { "1", "4cbf76e9-e7b3-497e-a100-fddd1923b97a", "Admin", "ADMIN" },
+                    { "2", "91bfc23e-9fe2-4b03-8854-6a2781b85b3e", "SuperUser", "SUPERUSER" },
+                    { "3", "d99c9089-2633-41af-8ccc-ebfabe61cef6", "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "25113f09-a179-4da2-912f-14d067b9e26e", 0, "426f6f3c-ed78-457d-bf04-b9dfcb406dc5", "judasz@example.com", false, false, null, null, null, "AQAAAAEAACcQAAAAEPxsnrz1E1mPKMKNIs0L3c1LaXZ/fSiVsiIBtkAR0u9ey2PImF+waSXWTLglgiBTJQ==", null, false, "1bd85f71-aa02-43cd-b6f2-6da80ba2fe64", false, "Judasz" },
+                    { "7755a8cc-cf32-4eed-b5c5-e517c1d3f7f4", 0, "81a4689a-6659-4735-aa78-9ca8ac9bbdda", "johndoe@example.com", false, false, null, null, null, "AQAAAAEAACcQAAAAEJ6dC5pppL2xGssQVupGP1TuosGNMfq3n39pmYeC1xM7KsNrVhxDsGWHFYUgro7pAA==", null, false, "a454993f-c282-47f0-8e09-38ce2f1a0a34", false, "johndoe" },
+                    { "bbfe92d2-11f2-43e5-a11b-face097bd67a", 0, "d77542b1-186d-469a-914d-44259d55a7f9", "adam@example.com", false, false, null, null, null, "AQAAAAEAACcQAAAAEPllPeLsdpeuJV2bdBw2kSXdWthr0la6VXOW4qaXDM5ZblrVjBHGn5UaNiuyc0pTXQ==", null, false, "fd3848d6-5189-4827-b5e9-fe536151a125", false, "Adam" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -225,6 +237,11 @@ namespace CoreServicebackend.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_UserId",
+                table: "Resources",
+                column: "UserId");
         }
 
         /// <inheritdoc />

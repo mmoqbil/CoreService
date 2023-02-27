@@ -1,4 +1,5 @@
 ﻿using CoreService_backend.DataAccess.DbContext;
+using CoreService_backend.Infrastructure;
 using CoreService_backend.Services.Api;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace CoreService_backend.Configurations.Extensions
 
             builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
             builder.Services.AddScoped<IResourceService, ResourceService>();
+            builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
             return builder;
         }

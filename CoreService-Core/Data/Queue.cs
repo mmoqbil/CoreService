@@ -10,6 +10,9 @@ namespace CoreService_Core.Data
     internal class Queue
     {
         public IEnumerable<Resource> _repository;
+        public List<Class1> Queue;
+
+
 
         public Queue()
         {

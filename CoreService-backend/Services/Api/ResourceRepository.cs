@@ -27,27 +27,36 @@ namespace CoreService_backend.Services.Api
             _context.Resources.Remove(resource);
         }
 
-        public int CreateResource(ResourceDto resouceDto)
+        public string CreateResource(ResourceDto resouceDto, string userId)
         {
             var resource = _mapper.Map<Resource>(resouceDto);
+            resource.UserId = userId;
             _context.Resources.Add(resource);
             return resource.Id;
         }
 
-        public void UpdateResource(ResourceUpdateDto updateResoucedto)
+        public void UpdateResource(ResourceUpdateDto updateResouceDto)
         {
-            var resource = _mapper.Map<Resource>(updateResoucedto);
+            var resource = _mapper.Map<Resource>(updateResouceDto);
             _context.Resources.Update(resource);
         }
 
-        public async Task<Resource?> GetResourceById(int id)
+        public async Task<Resource?> GetResourceById(string id)
         {
             return await _context.Resources.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<IEnumerable<Resource>?> GetResourcesByUserID(int userId)
+        public async Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userId)
         {
-            return await _context.Resources.AsNoTracking().Where(r => r.Id == userId).ToListAsync();
+            var resources =  await _context.Resources.AsNoTracking().Where(r => r.UserId == userId).ToListAsync();
+            var resourcesDto = new List<ResourceDto>();
+
+            foreach (var resource in resources)
+            {
+                resourcesDto.Add(_mapper.Map<ResourceDto>(resource));
+            }
+
+            return resourcesDto;
         }
 
         public async Task<bool> SaveChanges()

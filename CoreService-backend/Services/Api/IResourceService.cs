@@ -7,10 +7,10 @@ namespace CoreService_backend.Services.Api
     public interface IResourceService
     {
         Task<IEnumerable<Resource>?> GetResources();
-        Task<Resource?> GetResourceById(int resourceId);
-        Task<IEnumerable<Resource>?> GetResourcesByUserID(int userID);
-        Task<(int, ResourceDto)> CreateResource(ResourceDto Resource);
-        Task<bool> RemoveResource(int resourceId);
+        Task<Resource?> GetResourceById(string resourceId);
+        Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userID);
+        Task<(string, ResourceDto)> CreateResource(ResourceDto Resource, string userId);
+        Task<bool> RemoveResource(string resourceId);
         Task UpdateResource(ResourceUpdateDto Resource);
     }
 }

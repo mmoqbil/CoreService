@@ -1,69 +1,94 @@
-﻿using CoreService_backend.Dtos;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using CoreService_backend.Dtos;
 using CoreService_backend.Enitities;
 using CoreService_backend.Models.Dtos;
 using CoreService_backend.Services.Api;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
+using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace CoreService_backend.Controllers
 {
+    [Route("api/[controller]")] // ~/api/Rosource
     [ApiController]
-    [Route("[controller]")]
     public class ResourceController : ControllerBase
     {
-        private readonly IResourceService _resource;
+        private readonly IResourceService _resources;
 
         public ResourceController(IResourceService resource)
         {
-            _resource = resource;
+            _resources = resource;
         }
+
+        //[HttpGet("/all")]
+        //[Authorize(Roles= "Admin")]
+        //public async Task<IEnumerable<Resource>?> GetResources()
+        //{
+        //    return await _resources.GetResources();
+        //}
 
         [HttpGet]
-        public async Task<IEnumerable<Resource>?> GetResources()
+        [Authorize(Roles = "User")]
+        public async Task<IEnumerable<ResourceDto>?> GetUserResources()
         {
-            return await _resource.GetResources();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return null;
+            }
+
+            return await _resources.GetResourcesByUserID(userId);
         }
 
-        [HttpGet]
-        [Route("/{userId:int}")]
-        public async Task<IEnumerable<Resource>?> GetUserResources(int userId)
-        {
-            // add validation user Authentication
-            return await _resource.GetResourcesByUserID(userId);
-        }
+        //[HttpGet]
+        //[Route("{userId:int}/{resourceId:int}")]
+        //public async Task<Resource?> GetResource(int userId, int resourceId)
+        //{
+        //    // add validation user Authentication
 
-        [HttpGet]
-        [Route("/{userId:int}/{resourceId:int}")]
-        public async Task<Resource?> GetResource(int userId, int resourceId)
-        {
-            // add validation user Authentication
+        //    return await _resource.GetResourceById(resourceId);
+        //}
 
-            return await _resource.GetResourceById(resourceId);
-        }
-
-        [HttpOptions]
-        [Route("/{userID:int}/{resourceID:int}")]
-        public async Task UpdateResource([FromBody] ResourceUpdateDto resource)
+        [HttpPut]
+        [Authorize(Roles = "User")]
+        [Route("{resourceId}")]
+        public async Task UpdateResource([FromBody] ResourceUpdateDto updatedResource, string resourceId)
         {
-            // add validation user Authentication
-            await _resource.UpdateResource(resource);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var resource = await _resources.GetResourceById(resourceId);
+
+            if (userId == resource.UserId)
+            {
+                await _resources.UpdateResource(updatedResource);
+            }
         }
 
         [HttpDelete]
-        [Route("/{userId:int}/{resourceId:int}")]
-        public async Task DeleteResource(int resourceId)
+        [Authorize(Roles = "User")]
+        [Route("{resourceId}")]
+        public async Task DeleteResource(string resourceId)
         {
-            // add validation user Authentication
-            await _resource.RemoveResource(resourceId);
+            var resource = await _resources.GetResourceById(resourceId);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (resource != null && resource.UserId == userId)
+            {
+                await _resources.RemoveResource(resource.Id);
+            }
         }
 
         [HttpPost]
-        [Route("/{userId:int}/{resourceId:int}")]
+        [Authorize(Roles = "User")]
         public async Task CreateResource([FromBody] ResourceDto resource)
         {
-            // add validation user Authentication
-            await _resource.CreateResource(resource);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            await _resources.CreateResource(resource, userId);
         }
     }
 }

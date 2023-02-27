@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using CoreService_backend.Models.Enum;
 
 namespace CoreService_backend.Models.Dtos
 {
@@ -12,10 +13,12 @@ namespace CoreService_backend.Models.Dtos
 
         [Required]
         [MaxLength(256)]
-        public string IpAdress { get; set; }
+        public string UrlAdress { get; set; }
 
         [Required]
-        public int RepeatAfterSeconds { get; set; }
+        public int RefreshInSeconds { get; set; }
+        [Required]
+        public RequestType RequestType { get; set; }
     }
 
     public class ResourceUpdateDto : ResourceDto

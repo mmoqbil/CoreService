@@ -24,17 +24,18 @@ namespace CoreService_backend.Controllers
             _resources = resource;
         }
 
-        //[HttpGet("/all")]
-        //[Authorize(Roles= "Admin")]
-        //public async Task<IEnumerable<Resource>?> GetResources()
-        //{
-        //    return await _resources.GetResources();
-        //}
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IEnumerable<Resource>?> GetResources()
+        {
+            return await _resources.GetResources();
+        }
 
         [HttpGet]
         [Authorize(Roles = "User")]
         public async Task<IEnumerable<ResourceDto>?> GetUserResources()
         {
+            // TODO: W jaki sposób sprawdzić czy użytkownik istnieje? 
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
@@ -45,24 +46,30 @@ namespace CoreService_backend.Controllers
             return await _resources.GetResourcesByUserID(userId);
         }
 
-        //[HttpGet]
-        //[Route("{userId:int}/{resourceId:int}")]
-        //public async Task<Resource?> GetResource(int userId, int resourceId)
-        //{
-        //    // add validation user Authentication
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        [Route("{userId}/{resourceId}")]
+        public async Task<Resource?> GetResource(string resourceId)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        //    return await _resource.GetResourceById(resourceId);
-        //}
+            if (userId == resourceId)
+            {
+                return await _resources.GetResourceById(resourceId);
+            }
+
+            return null;
+        }
+
 
         [HttpPut]
         [Authorize(Roles = "User")]
         [Route("{resourceId}")]
-        public async Task UpdateResource([FromBody] ResourceUpdateDto updatedResource, string resourceId)
+        public async Task UpdateResource([FromBody] ResourceUpdateDto updatedResource)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var resource = await _resources.GetResourceById(resourceId);
 
-            if (userId == resource.UserId)
+            if (userId == updatedResource.UserId)
             {
                 await _resources.UpdateResource(updatedResource);
             }

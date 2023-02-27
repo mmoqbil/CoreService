@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CoreService_backend.Models.Enum;
 using Microsoft.AspNetCore.Identity;
 
 namespace CoreService_backend.Enitities
@@ -16,7 +17,7 @@ namespace CoreService_backend.Enitities
 
         [Required]
         [MaxLength(256)]
-        public string IpAdress { get; set; }
+        public string UrlAdress { get; set; }
 
         [Required]
         [ForeignKey(nameof(IdentityUser))]
@@ -25,6 +26,9 @@ namespace CoreService_backend.Enitities
         public virtual IdentityUser User { get; set; }
 
         [Required]
-        public TimeSpan Repeat { get; set; }
+        public TimeSpan Refreshing { get; set; }
+
+        [Required]
+        public RequestType RequestType { get; set; }
     }
 }

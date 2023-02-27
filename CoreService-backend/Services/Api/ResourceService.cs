@@ -27,7 +27,7 @@ namespace CoreService_backend.Services.Api
             return await _repository.GetResourcesByUserID(userId);
         }
 
-        public async Task<(string, ResourceDto)> CreateResource(ResourceDto resourceDto, string userId)
+        public async Task<(string, ResourceDto)> CreateResource(ResourceDto resourceDto, string? userId)
         {
             var resourceId = _repository.CreateResource(resourceDto, userId);
             await _repository.SaveChanges();

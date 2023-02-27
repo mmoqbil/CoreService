@@ -9,14 +9,17 @@ namespace CoreService_backend.Configurations.Mapper
         public CoreServiceProfile()
         {
             CreateMap<ResourceDto, Resource>()
-                .ForMember(d => d.Repeat, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RepeatAfterSeconds)));
+                .ForMember(d => d.Refreshing, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RefreshInSeconds)))
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+            
             CreateMap<Resource, ResourceDto>()
-                .ForMember(dest => dest.IpAdress, opt => opt.MapFrom(src => src.IpAdress))
+                .ForMember(dest => dest.UrlAdress, opt => opt.MapFrom(src => src.UrlAdress))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.RepeatAfterSeconds, opt => opt.MapFrom(src => src.Repeat.TotalSeconds));
+                .ForMember(dest => dest.RefreshInSeconds, opt => opt.MapFrom(src => src.Refreshing.TotalSeconds));
+            
             CreateMap<ResourceUpdateDto, Resource>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(d => d.Repeat, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RepeatAfterSeconds)));
+                .ForMember(d => d.Refreshing, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RefreshInSeconds)));
             //.ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId));
 
         }

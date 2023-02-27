@@ -4,6 +4,7 @@ using CoreService_backend.DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreServicebackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227230920_Rename column IpAdress to UrlAdress")]
+    partial class RenamecolumnIpAdresstoUrlAdress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,11 +35,8 @@ namespace CoreServicebackend.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<TimeSpan>("Refreshing")
+                    b.Property<TimeSpan>("Repeat")
                         .HasColumnType("time");
-
-                    b.Property<int>("RequestType")
-                        .HasColumnType("int");
 
                     b.Property<string>("UrlAdress")
                         .IsRequired()
@@ -84,21 +84,21 @@ namespace CoreServicebackend.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "c1c9e309-3a47-40f8-b6a1-8f938739455a",
+                            ConcurrencyStamp = "98743ab6-50de-4347-a09c-aa0a564f35de",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "2c66d17a-cf35-496e-9ac3-a5d15fb76622",
+                            ConcurrencyStamp = "5a024225-f795-449a-90bc-0956a67dd6ae",
                             Name = "SuperUser",
                             NormalizedName = "SUPERUSER"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "36e3e81d-a3eb-4032-ad8c-5eeecdb5ba82",
+                            ConcurrencyStamp = "027c9136-248f-4810-8446-ad2cbe53e0a4",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -196,43 +196,43 @@ namespace CoreServicebackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "60d7ab64-367b-4f35-908a-bacf504d1101",
+                            Id = "6236f412-6269-4102-865d-bb37615c1ea5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fc05559a-687d-4ef9-b54a-f800c6e26877",
+                            ConcurrencyStamp = "a0221793-99b3-4210-b42a-98d69b246c37",
                             Email = "johndoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEAJyc40Ha1W86OdbbPSOeW364hAXd43/57Wg2yROmqIu4xpAfqq/+mWysOCtmlvP0Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOXf2/t4BYR07SA/0BbJLehwQAPLJ5JPxOZRLLuOhLCQu6h8Gq7wZR+AeS16jsGTVA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9e70cd8d-9a8e-4ea6-906a-e12f52b3202c",
+                            SecurityStamp = "1668f851-566b-400a-afe1-d6509b44c956",
                             TwoFactorEnabled = false,
                             UserName = "johndoe"
                         },
                         new
                         {
-                            Id = "e7489b98-0fb5-4c6e-ab8c-3f4f88773823",
+                            Id = "ea53bafc-7a9f-4f6e-ad3a-785421aec8a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2d0d3c65-6fed-4f4d-bc55-6f3d8b205d01",
+                            ConcurrencyStamp = "fe6a15e0-cb36-45a2-8141-a361d03c51c4",
                             Email = "adam@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEGT1zdA98lz2zzTbsKlKicU2K2GIin+Y01/7HsG57fB/P+e2eatXNFWBdvWaxyN4mA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBVtQLGsTrYIaTrnTuuxOny0l39wl2vZ8WubdUjS+gLWNqPV1VYUBovli7IfNuGX1g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fe9b54ac-76a6-4dee-b53d-aea197552c8a",
+                            SecurityStamp = "478ca37c-923d-42ae-a184-a54eb2908220",
                             TwoFactorEnabled = false,
                             UserName = "Adam"
                         },
                         new
                         {
-                            Id = "a38eab76-7608-499b-a518-55c604b2db60",
+                            Id = "019fb97a-a78c-40ef-8de6-da21236d9ef5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "40ab1d18-5fee-48eb-8671-aaef4608c7c4",
+                            ConcurrencyStamp = "4d06bc98-c873-4fa5-8715-c69742cc41ff",
                             Email = "judasz@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEDSyIaR+wqevpdvaAWW1x1C2/nDHY6QGOky3mEjkk0IrI/9wSadVX+YE883pYSzXnw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENadgo6midNRXKOYnSOT8bf0m3lvRK3oI57h3Fw9vAVujPQeqbeu9J2gV/lJWaPCpA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dbf5de88-77a8-499c-9600-d39dda3e8335",
+                            SecurityStamp = "dd997ba8-8dca-472e-ac55-ecee47244c86",
                             TwoFactorEnabled = false,
                             UserName = "Judasz"
                         });

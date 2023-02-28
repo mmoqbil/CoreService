@@ -17,17 +17,8 @@ namespace CoreService_Core.Data.Service
             var list = new Queue();
             resources = list._repository;
         }
-       public string GetResourceIPById(int id)
-        {
-            foreach (var resource in resources)
-            {
-                if (id == resource.Id)
-                {
-                    return resource.IpAdress;
-                }
-            }
-             return null;
-        }
+
+
         public async Task<List<Resource>> CheckAllAvailableResources(ResourceService resourceService, HttpClient client, ILogger<Worker> logger)
         {
             List<Resource> availableResources = new List<Resource>();

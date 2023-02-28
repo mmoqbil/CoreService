@@ -1,7 +1,7 @@
 ﻿using CoreService_backend.Enitities;
 using CoreService_backend.Models.Dtos;
 
-namespace CoreService_backend.Services.Api
+namespace CoreService_backend.Services.Api.Resources
 {
     public class ResourceService : IResourceService
     {
@@ -22,7 +22,7 @@ namespace CoreService_backend.Services.Api
             return await _repository.GetResourceById(resourceId);
         }
 
-        public async Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userId)
+        public async Task<IEnumerable<ResourceDto>?> GetResourcesByUserId(string userId)
         {
             return await _repository.GetResourcesByUserID(userId);
         }

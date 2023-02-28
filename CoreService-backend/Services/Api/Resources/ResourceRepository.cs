@@ -4,7 +4,7 @@ using CoreService_backend.Enitities;
 using CoreService_backend.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreService_backend.Services.Api
+namespace CoreService_backend.Services.Api.Resources
 {
     public class ResourceRepository : IResourceRepository
     {
@@ -48,7 +48,7 @@ namespace CoreService_backend.Services.Api
 
         public async Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userId)
         {
-            var resources =  await _context.Resources.AsNoTracking().Where(r => r.UserId == userId).ToListAsync();
+            var resources = await _context.Resources.AsNoTracking().Where(r => r.UserId == userId).ToListAsync();
             var resourcesDto = new List<ResourceDto>();
 
             foreach (var resource in resources)

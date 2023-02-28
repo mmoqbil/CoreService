@@ -1,6 +1,6 @@
 ﻿using CoreService_backend.DataAccess.DbContext;
 using CoreService_backend.Infrastructure;
-using CoreService_backend.Services.Api;
+using CoreService_backend.Services.Api.Resources;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoreService_backend.Configurations.Extensions

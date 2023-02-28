@@ -13,13 +13,13 @@ using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredCla
 
 namespace CoreService_backend.Controllers
 {
-    [Route("api/[controller]")] // ~/api/Rosource
+    [Route("api/[controller]")] // ~/api/Response
     [ApiController]
-    public class ResourceController : ControllerBase
+    public class ResponseController : ControllerBase
     {
         private readonly IResourceService _resources;
 
-        public ResourceController(IResourceService resource)
+        public ResponseController(IResourceService resource)
         {
             _resources = resource;
         }

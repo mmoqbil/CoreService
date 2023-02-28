@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace CoreService_Core.Data.Model
 {
-    internal class Resource
+    public class Resource
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string IpAdress { get; set; }
         public string UserId { get; set; }
-        public TimeSpan Repeat { get; set; }
+        public int RepeatSeconds { get; set; }
+        public int TimeLeftSeconds { get; set; }
     }
 }

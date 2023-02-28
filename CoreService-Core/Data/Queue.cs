@@ -15,29 +15,32 @@ namespace CoreService_Core.Data
         {
             _repository = new List<Resource>()
             {
-                new Resource()
+               new Resource()
                 {
                     Id = 1,
                     IpAdress = "http://www.iamtimcorey.com",
                     Name = "IamTimCorey",
-                    Repeat = TimeSpan.FromMinutes(30),
+                    RepeatSeconds = 180,
                     UserId = "1",
+                    TimeLeftSeconds = 180,
                 },
                 new Resource()
                 {
                     Id = 2,
                     IpAdress = "https://codecool.com/pl/o-nas/",
                     Name = "CC/about",
-                    Repeat = TimeSpan.FromMinutes(30),
+                    RepeatSeconds = 60,
                     UserId = "2",
+                    TimeLeftSeconds = 60,
                 },
                 new Resource()
                 {
                     Id = 2,
                     IpAdress = "https://codecool.com/pl",
                     Name = "CC/home",
-                    Repeat = TimeSpan.FromMinutes(30),
+                    RepeatSeconds = 120,
                     UserId = "2",
+                    TimeLeftSeconds= 120,
                 }
             };
         }

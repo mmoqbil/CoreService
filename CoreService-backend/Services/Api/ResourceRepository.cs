@@ -27,12 +27,12 @@ namespace CoreService_backend.Services.Api
             _context.Resources.Remove(resource);
         }
 
-        public string CreateResource(ResourceDto resourceDto, string? userId)
+        public Resource CreateResource(ResourceDto resourceDto, string? userId)
         {
             var resource = _mapper.Map<Resource>(resourceDto);
             resource.UserId = userId;
             _context.Resources.Add(resource);
-            return resource.Id;
+            return resource;
         }
 
         public void UpdateResource(ResourceUpdateDto updateResourceDto)

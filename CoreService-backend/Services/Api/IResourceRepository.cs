@@ -7,7 +7,7 @@ namespace CoreService_backend.Services.Api
     {
         Task<IEnumerable<Resource>?> GetResources();
         void DeleteResource(Resource resource);
-        string CreateResource(ResourceDto resource, string? userId);
+        Resource CreateResource(ResourceDto resource, string? userId);
         void UpdateResource(ResourceUpdateDto book);
         Task<Resource?> GetResourceById(string id);
         Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userId);

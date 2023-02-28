@@ -99,11 +99,23 @@ namespace CoreService_backend.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> CreateResource([FromBody] ResourceDto resource)
+        public async Task<IActionResult> CreateResource([FromBody] ResourceDto resourceDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            await _resources.CreateResource(resource, userId);
+            var resource = await _resources.CreateResource(resourceDto, userId);
+
+            if (resource == null)
+            {
+                return BadRequest("Error - Resource not created.");
+            }
+
+            return CreatedAtRoute("GetResource", resource, resource.Id);
         }
     }
 }

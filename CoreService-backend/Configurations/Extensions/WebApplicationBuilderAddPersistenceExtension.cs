@@ -1,4 +1,4 @@
-﻿using CoreService_backend.DataAccess.DbContext;
+﻿using CoreService_backend.Data.ApiDbContext;
 using CoreService_backend.Infrastructure;
 using CoreService_backend.Services.Api.Resources;
 using Microsoft.EntityFrameworkCore;

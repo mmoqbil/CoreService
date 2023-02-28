@@ -1,4 +1,4 @@
-﻿using CoreService_Core.Data.Model;
+﻿using CoreService_Core.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

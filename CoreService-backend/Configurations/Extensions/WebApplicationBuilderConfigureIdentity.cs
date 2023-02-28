@@ -1,4 +1,4 @@
-﻿using CoreService_backend.DataAccess.DbContext;
+﻿using CoreService_backend.Data.ApiDbContext;
 using Microsoft.AspNetCore.Identity;
 
 namespace CoreService_backend.Configurations.Extensions

@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
-using CoreService_backend.Models.Enum;
-using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using CoreService_Core.Model.Enum;
 
-namespace CoreService_backend.Enitities
+namespace CoreService_Core.Model.Entities
 {
-    [Table("Resources")]
     public class Resource
     {
         [Key]

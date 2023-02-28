@@ -4,7 +4,7 @@ using CoreService_backend.Models.Enitities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreService_backend.DataAccess.DbContext
+namespace CoreService_backend.Data.ApiDbContext
 {
     public class AppDbContext : IdentityDbContext
     {
@@ -13,6 +13,8 @@ namespace CoreService_backend.DataAccess.DbContext
 
         private readonly string? _connectionString =
             "Server = (localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
+        // TODO: remove this CS
+
 
         public AppDbContext(DbContextOptions options) : base(options)
         {

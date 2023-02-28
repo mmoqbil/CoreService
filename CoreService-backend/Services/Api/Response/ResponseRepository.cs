@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreService_backend.DataAccess.DbContext;
+using CoreService_backend.Data.ApiDbContext;
 using CoreService_backend.Models.Enitities;
 using Microsoft.EntityFrameworkCore;
 

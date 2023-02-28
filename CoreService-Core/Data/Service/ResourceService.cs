@@ -28,7 +28,7 @@ namespace CoreService_Core.Data.Service
             }
              return null;
         }
-        public static List<Resource> GetAllAvailableResources(ResourceService resourceService, ILogger<Worker> logger)
+        public async Task<List<Resource>> CheckAllAvailableResources(ResourceService resourceService, HttpClient client, ILogger<Worker> logger)
         {
             List<Resource> availableResources = new List<Resource>();
             foreach (var resource in resourceService.resources)
@@ -37,6 +37,15 @@ namespace CoreService_Core.Data.Service
                 {
                     resource.TimeLeftSeconds = resource.RepeatSeconds;
                     availableResources.Add(resource);
+                    var result = await client.GetAsync(resource.IpAdress);
+                    if (result.IsSuccessStatusCode)
+                    {
+                        logger.LogInformation("The status code was: {statusCode}, time: {time}, name: {name}", result.StatusCode, DateTime.Now, resource.Name);
+                    }
+                    else
+                    {
+                        logger.LogError("The website is down. Status code {StatusCode}", result.StatusCode);
+                    }
                 }
                 else
                 {

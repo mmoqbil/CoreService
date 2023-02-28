@@ -38,20 +38,7 @@ namespace CoreService_Core
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var availableResourcesToGet = ResourceService.GetAllAvailableResources(_resourceService, _logger);
-                foreach (var resource in availableResourcesToGet)
-                {
-                    var result = await _client.GetAsync(resource.IpAdress);
-
-                    if (result.IsSuccessStatusCode)
-                    {
-                        _logger.LogInformation("The status code was: {statusCode}, time: {time}, name: {name}", result.StatusCode, DateTime.Now, resource.Name);
-                    }
-                    else
-                    {
-                        _logger.LogError("The website is down. Status code {StatusCode}", result.StatusCode);
-                    }
-                }
+                _resourceService.CheckAllAvailableResources(_resourceService, _client,_logger);
                 await Task.Delay(3000, stoppingToken);
             }
         }

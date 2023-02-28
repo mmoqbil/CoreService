@@ -38,7 +38,7 @@ namespace CoreService_Core
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _resourceService.CheckAllAvailableResources(_resourceService, _client,_logger);
+                _resourceService.resources = await _resourceService.CheckAllAvailableResources(_resourceService, _client,_logger);
                 await Task.Delay(3000, stoppingToken);
             }
         }

@@ -56,7 +56,7 @@ namespace CoreService_backend.Controllers
 
                 if (isCreated.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(newUser, "user");
+                    await _userManager.AddToRoleAsync(newUser, "User");
                     var roles = await _userManager.GetRolesAsync(newUser);
 
                     // Generate new token

@@ -23,6 +23,6 @@ namespace CoreService_backend.Models.Enitities
         public int Ping { get; set; }
 
         [Required]
-        public TimeOnly DateTime { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }

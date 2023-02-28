@@ -33,17 +33,16 @@ namespace CoreService_backend.Controllers
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public async Task<IEnumerable<ResourceDto>?> GetUserResources()
+        public async Task<ActionResult<IEnumerable<ResourceDto>?>> GetUserResources()
         {
-            // TODO: W jaki sposób sprawdzić czy użytkownik istnieje? 
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
             {
-                return null;
+                return Ok(Enumerable.Empty<ResourceDto>());
             }
 
-            return await _resources.GetResourcesByUserID(userId);
+            return Ok(await _resources.GetResourcesByUserID(userId));
         }
 
         [HttpGet]
@@ -78,20 +77,29 @@ namespace CoreService_backend.Controllers
         [HttpDelete]
         [Authorize(Roles = "User")]
         [Route("{resourceId}")]
-        public async Task DeleteResource(string resourceId)
+        public async Task<IActionResult> DeleteResource(string resourceId)
         {
             var resource = await _resources.GetResourceById(resourceId);
+
+            if (resource is null)
+            {
+                return NotFound();
+            }
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (resource != null && resource.UserId == userId)
+            if (resource.UserId != userId)
             {
-                await _resources.RemoveResource(resource.Id);
+                return Unauthorized();
             }
+
+            await _resources.RemoveResource(resource.Id);
+            return NoContent();
         }
+
 
         [HttpPost]
         [Authorize(Roles = "User")]
-        public async Task CreateResource([FromBody] ResourceDto resource)
+        public async Task<IActionResult> CreateResource([FromBody] ResourceDto resource)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 

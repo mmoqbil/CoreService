@@ -28,5 +28,22 @@ namespace CoreService_Core.Data.Service
             }
              return null;
         }
+        public static List<Resource> GetAllAvailableResources(ResourceService resourceService, ILogger<Worker> logger)
+        {
+            List<Resource> availableResources = new List<Resource>();
+            foreach (var resource in resourceService.resources)
+            {
+                if (resource.TimeLeftSeconds <= 0)
+                {
+                    resource.TimeLeftSeconds = resource.RepeatSeconds;
+                    availableResources.Add(resource);
+                }
+                else
+                {
+                    resource.TimeLeftSeconds -= 60;
+                }
+            }
+            return availableResources;
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace CoreService_backend.Controllers
             {
                 return Ok(Enumerable.Empty<ResourceDto>());
             }
-
+            //TODO: returned resource should have resourceId
             return Ok(await _resources.GetResourcesByUserId(userId));
         }
 
@@ -54,6 +54,7 @@ namespace CoreService_backend.Controllers
 
             if (userId == resourceId)
             {
+                //TODO: returned resource should have resourceId
                 return await _resources.GetResourceById(resourceId);
             }
 
@@ -66,6 +67,7 @@ namespace CoreService_backend.Controllers
         [Route("{resourceId}")]
         public async Task UpdateResource([FromBody] ResourceUpdateDto updatedResource)
         {
+            //TODO: This endpoint should be validated!
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == updatedResource.UserId)
@@ -114,7 +116,7 @@ namespace CoreService_backend.Controllers
             {
                 return BadRequest("Error - Resource not created.");
             }
-
+            //TODO: FIX returned resource should be ResourceDto not Resource!
             return Ok(resource); // TODO: Rebuild to CreatedAtRoute
         }
     }

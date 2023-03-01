@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CoreService_Core.Model.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,28 +17,28 @@ namespace CoreService_Core.Infrastructure
             
         }
 
-        public async Task<List<Resource>> checkallavailableresources(resourceservice resourceservice, httpclient client, ilogger<worker> logger)
+        public async Task<List<ResourceDto>> checkallavailableresources(List<ResourceDto> resourceList, HttpClient client, ILogger<Worker> logger)
         {
-            list<resource> availableresources = new list<resource>();
-            foreach (var resource in resourceservice.resources)
+            List<ResourceDto> availableresources = new List<ResourceDto>();
+            foreach (var resource in resourceList)
             {
-                if (resource.timeleftseconds <= 0)
+                if (resource.TimeLeft <= TimeSpan.Zero)
                 {
-                    resource.timeleftseconds = resource.repeatseconds;
-                    availableresources.add(resource);
-                    var result = await client.getasync(resource.ipadress);
-                    if (result.issuccessstatuscode)
+                    resource.TimeLeft = resource.Refresh;
+                    availableresources.Add(resource);
+                    var result = await client.GetAsync(resource.UrlAdress);
+                    if (result.IsSuccessStatusCode)
                     {
-                        logger.loginformation("the status code was: {statuscode}, time: {time}, name: {name}", result.statuscode, datetime.now, resource.name);
+                        logger.LogInformation("the status code was: {statuscode}, time: {time}, name: {name}", result.StatusCode, DateTime.Now, resource.Name);
                     }
                     else
                     {
-                        logger.logerror("the website is down. status code {statuscode}", result.statuscode);
+                        logger.LogError("the website is down. status code {statuscode}", result.StatusCode);
                     }
                 }
                 else
                 {
-                    resource.timeleftseconds -= 60;
+                    resource.TimeLeft -= TimeSpan.FromSeconds(60);
                 }
             }
             return availableresources;

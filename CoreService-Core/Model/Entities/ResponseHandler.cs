@@ -17,7 +17,7 @@ namespace CoreService_Core.Model.Entities
         public int StatusCode { get; set; }
 
         [Required]
-        public ResponseStatus Status { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
 
         [MaxLength(100)]
         public string? ErrorMessage { get; set; }

@@ -19,7 +19,7 @@ namespace CoreService_backend.Models.Enitities
         public int StatusCode { get; set; }
 
         [Required]
-        public ResponseStatus Status { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
 
         [MaxLength(100)]
         public string? ErrorMessage { get; set; }

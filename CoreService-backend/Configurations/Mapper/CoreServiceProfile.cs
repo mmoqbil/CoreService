@@ -8,7 +8,7 @@ namespace CoreService_backend.Configurations.Mapper
     {
         public CoreServiceProfile()
         {
-            CreateMap<ResourceDto, Resource>()
+            CreateMap<ResourceWithTimeDto, Resource>()
                 .ForMember(d => d.Refresh, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RefreshInSeconds)))
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
             
@@ -22,6 +22,8 @@ namespace CoreService_backend.Configurations.Mapper
                 .ForMember(d => d.Refresh, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RefreshInSeconds)));
             //.ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId));
 
+            CreateMap<ResourceDto, ResourceWithTimeDto>()
+                .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }

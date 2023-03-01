@@ -9,6 +9,6 @@ namespace CoreService_Core.Service
 {
     internal interface IResponseRepository
     {
-        public Task createResponse(ResponseHandler response);
+        public Task CreateResponse(ResponseHandler response);
     }
 }

@@ -10,5 +10,6 @@ namespace CoreService_Core.Service
     internal interface IDbManager
     {
         public Task<IEnumerable<Resource>?> GetAllResourcesAsync();
+        public Task CreateResponse(ResponseHandler response);
     }
 }

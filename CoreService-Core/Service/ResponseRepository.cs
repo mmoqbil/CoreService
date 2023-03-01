@@ -20,7 +20,7 @@ namespace CoreService_Core.Service
             _mapper = mapper;
         }
 
-        public async Task createResponse(ResponseHandler response)
+        public async Task CreateResponse(ResponseHandler response)
         {
             await _context.Response.AddAsync(response);
             await _context.SaveChangesAsync();

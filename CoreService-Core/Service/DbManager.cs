@@ -10,16 +10,24 @@ namespace CoreService_Core.Infrastructure
 {
     internal class DbManager : IDbManager
     {
+        public IResourceRepository ResponseRepository { get; }
         private readonly IResourceRepository _resourceRepository;
+        private readonly IResponseRepository _responseRepository;
 
-        public DbManager(IResourceRepository repository)
+        public DbManager(IResourceRepository resourceRepository, IResponseRepository responseRepository)
         {
-            _resourceRepository = repository;
+            _responseRepository = responseRepository;
+            _resourceRepository = resourceRepository;
         }
 
         public async Task<IEnumerable<Resource>?> GetAllResourcesAsync()
         {
             return await _resourceRepository.GetAllResourceAsync();
+        }
+
+        public async Task CreateResponse(ResponseHandler response)
+        {
+            await _responseRepository.CreateResponse(response);
         }
     }
 }

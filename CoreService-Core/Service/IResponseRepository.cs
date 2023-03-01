@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using CoreService_Core.Model.Entities;
 
-namespace CoreService_Core.Data
+namespace CoreService_Core.Service
 {
-    internal class Queue
+    internal interface IResponseRepository
     {
-        public IEnumerable<Resource> _repository;
+        public Task createResponse(ResponseHandler response);
     }
 }

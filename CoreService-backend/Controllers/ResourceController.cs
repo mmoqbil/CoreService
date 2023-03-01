@@ -115,7 +115,7 @@ namespace CoreService_backend.Controllers
                 return BadRequest("Error - Resource not created.");
             }
 
-            return CreatedAtRoute("GetResource", resource, resource.Id);
+            return Ok(resource); // TODO: Rebuild to CreatedAtRoute
         }
     }
 }

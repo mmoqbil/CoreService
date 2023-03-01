@@ -29,5 +29,8 @@ namespace CoreService_Core.Model.Entities
 
         [Required]
         public RequestType RequestType { get; set; }
+
+        [Required]
+        public DateTime CreationTime { get; set; }
     }
 }

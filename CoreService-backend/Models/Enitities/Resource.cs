@@ -30,5 +30,8 @@ namespace CoreService_backend.Enitities
 
         [Required]
         public RequestType RequestType { get; set; }
+
+        [Required]
+        public DateTime CreationTime { get; set; }
     }
 }

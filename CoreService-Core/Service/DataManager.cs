@@ -8,13 +8,12 @@ using CoreService_Core.Service;
 
 namespace CoreService_Core.Infrastructure
 {
-    internal class DbManager : IDbManager
+    internal class DataManager : IDataManager
     {
-        public IResourceRepository ResponseRepository { get; }
         private readonly IResourceRepository _resourceRepository;
         private readonly IResponseRepository _responseRepository;
 
-        public DbManager(IResourceRepository resourceRepository, IResponseRepository responseRepository)
+        public DataManager(IResourceRepository resourceRepository, IResponseRepository responseRepository)
         {
             _responseRepository = responseRepository;
             _resourceRepository = resourceRepository;
@@ -31,4 +30,3 @@ namespace CoreService_Core.Infrastructure
         }
     }
 }
-

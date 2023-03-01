@@ -17,8 +17,14 @@ namespace CoreService_backend.Models.Dtos
 
         [Required]
         public int RefreshInSeconds { get; set; }
+
         [Required]
         public RequestType RequestType { get; set; }
+    }
+
+    public class ResourceWithTimeDto : ResourceDto
+    {
+        public DateTime CreationTime { get; set; }
     }
 
     public class ResourceUpdateDto : ResourceDto

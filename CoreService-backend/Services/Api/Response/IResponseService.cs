@@ -9,6 +9,5 @@ namespace CoreService_backend.Services.Api.Response
         Task<ResponseHandler?> GetResponseById(int responseId);
         Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string userId);
         Task<bool> RemoveResponse(int responseId);
-
     }
 }

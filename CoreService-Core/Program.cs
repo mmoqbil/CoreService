@@ -1,5 +1,4 @@
 using CoreService_Core;
-using CoreService_Core.Data.Model;
 using CoreService_Core.Data.Service;
 using Microsoft.AspNetCore.Builder;
 using Serilog;

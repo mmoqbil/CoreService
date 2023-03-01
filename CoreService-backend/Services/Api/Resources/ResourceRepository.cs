@@ -29,7 +29,8 @@ namespace CoreService_backend.Services.Api.Resources
 
         public Resource CreateResource(ResourceDto resourceDto, string? userId)
         {
-            var resource = _mapper.Map<Resource>(resourceDto);
+            var resourceWithTimeDto = _mapper.Map<ResourceWithTimeDto>(resourceDto);
+            var resource = _mapper.Map<Resource>(resourceWithTimeDto);
             resource.UserId = userId;
             _context.Resources.Add(resource);
             return resource;

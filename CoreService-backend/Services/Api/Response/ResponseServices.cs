@@ -22,7 +22,7 @@ namespace CoreService_backend.Services.Api.Response
             return await _repository.GetResponseById(responseId);
         }
 
-        public async Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string userId)
+        public async Task<IEnumerable<ResponseHandler>?> GetResponsesByResourceId(string userId)
         {
             return await _repository.GetResourcesByResourceId(userId);
         }

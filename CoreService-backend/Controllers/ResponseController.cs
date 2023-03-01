@@ -3,6 +3,7 @@ using System.Security.Claims;
 using CoreService_backend.Dtos;
 using CoreService_backend.Enitities;
 using CoreService_backend.Models.Dtos;
+using CoreService_backend.Models.Enitities;
 using CoreService_backend.Services.Api.Resources;
 using CoreService_backend.Services.Api.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,19 @@ namespace CoreService_backend.Controllers
             _response = response;
         }
 
-        // TODO: Implement service for response
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        [Route("{resourceId}}")]
+        public async Task<ActionResult<IEnumerable<ResponseHandler>?>> GetResponseByResourceId(string resourceId)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return Ok(Enumerable.Empty<ResourceDto>());
+            }
+
+            return Ok(await _response.GetResponsesByResourceId(resourceId));
+        }
     }
 }

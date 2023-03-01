@@ -15,12 +15,12 @@ namespace CoreService_backend.Models.Enitities
         public string ResourceId { get; set; }
 
         [Required]
-        public string ResponseStatus { get; set; }
+        public int StatusCode { get; set; }
 
         [MaxLength(100)]
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
-        public int Ping { get; set; }
+        public int? Ping { get; set; }
 
         [Required]
         public DateTime DateTime { get; set; }

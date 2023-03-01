@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CoreService_Core.Model.Dto;
 using CoreService_Core.Model.Entities;
-using CoreService_Core.Service;
+using CoreService_Core.Service.Interface;
 
-namespace CoreService_Core.Infrastructure
+namespace CoreService_Core.Service
 {
     public class DataManager : IDataManager
     {

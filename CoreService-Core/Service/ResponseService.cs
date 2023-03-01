@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreService_Core.Model.Dto;
-using CoreService_Core.Model.Entities;
 
 namespace CoreService_Core.Service
 {
-    public interface IDataManager
+    public static class ResponseService
     {
-        public IEnumerable<ResourceDto>? GetAllResourcesAsync();
-        public Task CreateResponse(ResponseHandler response);
+        public static void BadResponseHandler(int statusCode, ResourceDto resource)
+        {
+
+        }
     }
 }

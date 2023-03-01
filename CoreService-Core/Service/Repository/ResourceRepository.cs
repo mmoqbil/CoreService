@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CoreService_Core.Data.CoreDbContext;
 using CoreService_Core.Model.Entities;
+using CoreService_Core.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreService_Core.Service
+namespace CoreService_Core.Service.Repository
 {
     public class ResourceRepository : IResourceRepository
     {

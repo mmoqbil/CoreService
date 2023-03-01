@@ -2,6 +2,8 @@ using CoreService_Core;
 using CoreService_Core.Data.CoreDbContext;
 using CoreService_Core.Infrastructure;
 using CoreService_Core.Service;
+using CoreService_Core.Service.Interface;
+using CoreService_Core.Service.Repository;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;

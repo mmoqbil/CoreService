@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CoreService_Core.Model.Entities;
 
-namespace CoreService_Core.Service
+namespace CoreService_Core.Service.Interface
 {
     public interface IResourceRepository
     {

@@ -8,40 +8,39 @@ using System.Threading.Tasks;
 
 namespace CoreService_Core.Infrastructure
 {
-    internal class QueueManager
+    public class QueueManager
     {
-        private readonly IMapper _mapper;
-        
-        public QueueManager()
+        public static async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto>? resourceList, HttpClient client, ILogger<Worker> logger)
         {
-            
-        }
+            //TODO: obsłużyć pustą liste _resourceList!
 
-        public async Task<List<ResourceDto>> checkallavailableresources(List<ResourceDto> resourceList, HttpClient client, ILogger<Worker> logger)
-        {
-            List<ResourceDto> availableresources = new List<ResourceDto>();
+            var availableResources = new List<ResourceDto>();
             foreach (var resource in resourceList)
             {
                 if (resource.TimeLeft <= TimeSpan.Zero)
                 {
                     resource.TimeLeft = resource.Refresh;
-                    availableresources.Add(resource);
+                    availableResources.Add(resource);
                     var result = await client.GetAsync(resource.UrlAdress);
                     if (result.IsSuccessStatusCode)
                     {
-                        logger.LogInformation("the status code was: {statuscode}, time: {time}, name: {name}", result.StatusCode, DateTime.Now, resource.Name);
+                        logger.LogInformation("[{status}]the status code was: {statusCode}, time: {time}, name: {name}", "SUCCESS", result.StatusCode, DateTime.Now, resource.Name);
                     }
                     else
                     {
-                        logger.LogError("the website is down. status code {statuscode}", result.StatusCode);
+                        logger.LogError("[{status}]the website is down. status code {statusCode}", "SUCCESS", result.StatusCode);
                     }
                 }
                 else
                 {
+                    logger.LogInformation("[{status}] Resource {name} was skipped, left time to refresh: {timeLeft}", "SKIP", resource.Name, resource.TimeLeft);
                     resource.TimeLeft -= TimeSpan.FromSeconds(60);
+                    availableResources.Add(resource);
                 }
+                
             }
-            return availableresources;
+            logger.LogInformation("End loop");
+            return availableResources;
         }
     }
 }

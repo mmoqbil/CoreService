@@ -1,4 +1,7 @@
-using CoreService_Core.Data.Service;
+using CoreService_Core.Infrastructure;
+using CoreService_Core.Model.Dto;
+using CoreService_Core.Model.Entities;
+using CoreService_Core.Service;
 
 
 namespace CoreService_Core
@@ -6,18 +9,20 @@ namespace CoreService_Core
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly ResourceService _resourceService;
+        private readonly IDataManager _dataManager;
+        private IEnumerable<ResourceDto>? _resources;
         private HttpClient _client;
 
-        public Worker(ILogger<Worker> logger, ResourceService resourceService)
+        public Worker(ILogger<Worker> logger, IDataManager dataManager)
         {
             _logger = logger;
-            _resourceService = resourceService;
+            _dataManager = dataManager;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _client = new HttpClient();
+            _resources = _dataManager.GetAllResourcesAsync();
             return base.StartAsync(cancellationToken);
         }
 
@@ -31,7 +36,7 @@ namespace CoreService_Core
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                //_resourceService.resources = await _resourceService.CheckAllAvailableResources(_resourceService, _client,_logger);
+                _resources = await QueueManager.CheckAllAvailableResources(_resources, _client, _logger);
                 await Task.Delay(3000, stoppingToken);
             }
         }

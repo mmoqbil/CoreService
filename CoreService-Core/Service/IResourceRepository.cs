@@ -7,7 +7,7 @@ using CoreService_Core.Model.Entities;
 
 namespace CoreService_Core.Service
 {
-    internal interface IResourceRepository
+    public interface IResourceRepository
     {
         public Task<IEnumerable<Resource>?> GetAllResourceAsync();
 

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoreService_Core.Data.CoreDbContext
 {
-    internal class CoreDbContext : DbContext
+    public class CoreDbContext : DbContext
     {
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResponseHandler> Response { get; set; }
-        private readonly string? _connectionString =
-            "Server = (localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
+        private const string ConnectionString = "Server=(localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
+        // TODO: remove this CS
 
         public CoreDbContext(DbContextOptions options) : base(options)
         {
@@ -20,7 +20,7 @@ namespace CoreService_Core.Data.CoreDbContext
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder
-                    .UseSqlServer(_connectionString)
+                    .UseSqlServer(ConnectionString)
                     .LogTo(Console.WriteLine, LogLevel.Information)
                     .EnableSensitiveDataLogging();
             }

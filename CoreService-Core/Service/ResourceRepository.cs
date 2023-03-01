@@ -10,15 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoreService_Core.Service
 {
-    internal class ResourceRepository : IResourceRepository
+    public class ResourceRepository : IResourceRepository
     {
         private readonly CoreDbContext _context;
-        private readonly IMapper _mapper;
 
-        public ResourceRepository(CoreDbContext context, IMapper mapper)
+        public ResourceRepository(CoreDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Resource>?> GetAllResourceAsync()

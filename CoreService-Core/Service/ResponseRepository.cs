@@ -9,15 +9,14 @@ using CoreService_Core.Model.Entities;
 
 namespace CoreService_Core.Service
 {
-    internal class ResponseRepository : IResponseRepository
+    public class ResponseRepository : IResponseRepository
     {
         private readonly CoreDbContext _context;
-        private readonly IMapper _mapper;
 
-        public ResponseRepository(CoreDbContext context, IMapper mapper)
+
+        public ResponseRepository(CoreDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task CreateResponse(ResponseHandler response)

@@ -11,8 +11,7 @@ namespace CoreService_backend.Data.ApiDbContext
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResponseHandler> Response { get; set; }
 
-        private readonly string? _connectionString =
-            "Server = (localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
+        private readonly string _connectionString = "Server = (localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
         // TODO: remove this CS
 
 

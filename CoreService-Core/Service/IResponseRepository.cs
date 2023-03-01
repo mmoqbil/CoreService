@@ -7,7 +7,7 @@ using CoreService_Core.Model.Entities;
 
 namespace CoreService_Core.Service
 {
-    internal interface IResponseRepository
+    public interface IResponseRepository
     {
         public Task CreateResponse(ResponseHandler response);
     }

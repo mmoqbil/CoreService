@@ -1,6 +1,8 @@
 using CoreService_Core;
-using CoreService_Core.Data.Service;
-using Microsoft.AspNetCore.Builder;
+using CoreService_Core.Data.CoreDbContext;
+using CoreService_Core.Infrastructure;
+using CoreService_Core.Service;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 
@@ -30,9 +32,21 @@ finally
 static IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)
         .UseWindowsService()
-        .ConfigureServices(services =>
+        .ConfigureServices((hostContext, services) =>
         {
-            services.AddSingleton<ResourceService>();
+            IConfiguration configuration = hostContext.Configuration;
+            services.AddDbContext<CoreDbContext>(opt =>
+                {
+                    opt.UseSqlServer(configuration.GetConnectionString("CoreServiceConnection"));
+                },
+                ServiceLifetime.Singleton
+            );
+
+            services.AddSingleton<IResourceRepository, ResourceRepository>();
+            services.AddSingleton<IResponseRepository, ResponseRepository>();
+            services.AddSingleton<IDataManager, DataManager>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHostedService<Worker>();
         })
         .UseSerilog();

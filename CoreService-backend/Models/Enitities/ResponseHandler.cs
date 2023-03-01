@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using CoreService_backend.Enitities;
+using CoreService_backend.Models.Enum;
 
 namespace CoreService_backend.Models.Enitities
 {
@@ -16,6 +17,9 @@ namespace CoreService_backend.Models.Enitities
 
         [Required]
         public int StatusCode { get; set; }
+
+        [Required]
+        public ResponseStatus Status { get; set; }
 
         [MaxLength(100)]
         public string? ErrorMessage { get; set; }

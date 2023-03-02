@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using CoreService_Core.Model.Dto;
 using CoreService_Core.Service.Interface;
 
@@ -21,6 +19,11 @@ namespace CoreService_Core.Service
         public void CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource)
         {
             _dataManager.CreateResponse(httpStatusCode, resource);
+        }
+
+        public void CreateResponseHandlerWithErrorMessage(ResourceDto resource, string errorMessage)
+        {
+            _dataManager.CreateResponseWithErrorMessage(resource, errorMessage);
         }
     }
 }

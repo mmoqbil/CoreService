@@ -36,7 +36,7 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         .UseWindowsService()
         .ConfigureServices((hostContext, services) =>
         {
-            IConfiguration configuration = hostContext.Configuration;
+            var configuration = hostContext.Configuration;
             services.AddDbContext<CoreDbContext>(opt =>
                 {
                     opt.UseSqlServer(configuration.GetConnectionString("CoreServiceConnection"));
@@ -46,7 +46,10 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
 
             services.AddSingleton<IResourceRepository, ResourceRepository>();
             services.AddSingleton<IResponseRepository, ResponseRepository>();
+            services.AddSingleton<IResponseService, ResponseService>();
             services.AddSingleton<IDataManager, DataManager>();
+            services.AddSingleton<IQueueManager, QueueManager>();
+            
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHostedService<Worker>();

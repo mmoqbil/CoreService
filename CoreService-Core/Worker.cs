@@ -9,13 +9,17 @@ namespace CoreService_Core
     {
         private readonly ILogger<Worker> _logger;
         private readonly IDataManager _dataManager;
+        private readonly IQueueManager _queueManager;
         private IEnumerable<ResourceDto>? _resources;
         private HttpClient _client;
 
-        public Worker(ILogger<Worker> logger, IDataManager dataManager)
+        private const int MaxLoopIterations = 20;
+
+        public Worker(ILogger<Worker> logger, IDataManager dataManager, IQueueManager queueManager)
         {
-            _logger = logger;
-            _dataManager = dataManager;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
+            _queueManager = queueManager;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -33,9 +37,23 @@ namespace CoreService_Core
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var loopIteration = 0;
+
             while (!stoppingToken.IsCancellationRequested)
             {
-                _resources = await QueueManager.CheckAllAvailableResources(_resources, _client, _logger);
+                if (_resources != null)
+                {
+                    _resources = await _queueManager.CheckAllAvailableResources(_resources, _client, _logger);
+
+                    loopIteration++;
+
+                    if (loopIteration >= MaxLoopIterations)
+                    {
+                        _resources = await _dataManager.UpdateResourcesAsync();
+                        loopIteration = 0;
+                    }
+                }
+
                 await Task.Delay(3000, stoppingToken);
             }
         }

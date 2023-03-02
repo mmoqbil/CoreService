@@ -29,7 +29,7 @@ namespace CoreService_Core.Service
 
         public async Task CreateResponse(HttpStatusCode statusCode, ResourceDto resource)
         {
-            var response = _mapper.Map<ResponseHandler>(resource); // TODO: crash here 
+            var response = _mapper.Map<ResponseHandler>(resource);
             response.StatusCode = (int)statusCode;
 
             response.ResponseStatus = (int)statusCode is >= 200 and < 300 ? ResponseStatus.Successful : ResponseStatus.Fail;
@@ -39,8 +39,7 @@ namespace CoreService_Core.Service
 
         public async Task CreateResponseWithErrorMessage(ResourceDto resource, string errorMessage)
         {
-            var response = _mapper.Map<ResponseHandler>(resource); // TODO: crash here 
-            //response.StatusCode = (int)statusCode; TODO: what a StatusCode add here? 
+            var response = _mapper.Map<ResponseHandler>(resource);
 
             response.ErrorMessage = errorMessage;
             response.ResponseStatus = ResponseStatus.Fail;

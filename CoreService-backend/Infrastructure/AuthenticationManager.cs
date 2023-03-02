@@ -51,7 +51,7 @@ namespace CoreService_backend.Infrastructure
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = subject,
-                Expires = DateTime.Now.AddHours(2), //TODO: Chagne to 30 minuts
+                Expires = DateTime.Now.AddHours(2), //TODO: Change to 30 minutes
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
 

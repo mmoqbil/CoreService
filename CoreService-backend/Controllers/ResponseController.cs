@@ -25,6 +25,6 @@ namespace CoreService_backend.Controllers
             _response = response;
         }
 
-        // TODO: Implement service for response
+        // TODO: Implement endpoints for response
     }
 }

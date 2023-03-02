@@ -29,12 +29,28 @@ namespace CoreService_Core.Service
 
         public async Task CreateResponse(HttpStatusCode statusCode, ResourceDto resource)
         {
-            var response = _mapper.Map<ResponseHandler>(resource);
+            var response = _mapper.Map<ResponseHandler>(resource); // TODO: crash here 
             response.StatusCode = (int)statusCode;
 
             response.ResponseStatus = (int)statusCode is > 200 and < 300 ? ResponseStatus.Successful : ResponseStatus.Fail;
             
             await _responseRepository.CreateResponse(response);
+        }
+
+        public async Task CreateResponseWithErrorMessage(ResourceDto resource, string errorMessage)
+        {
+            var response = _mapper.Map<ResponseHandler>(resource); // TODO: crash here 
+            //response.StatusCode = (int)statusCode; TODO: what a StatusCode add here? 
+
+            response.ErrorMessage = errorMessage;
+            response.ResponseStatus = ResponseStatus.Fail;
+
+            await _responseRepository.CreateResponse(response);
+        }
+
+        public Task<IEnumerable<ResourceDto>?> UpdateResourcesAsync()
+        {
+            throw new NotImplementedException();
         }
 
         private IEnumerable<ResourceDto> MappingResources(IEnumerable<Resource>? resources)

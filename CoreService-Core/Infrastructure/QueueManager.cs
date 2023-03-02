@@ -3,18 +3,24 @@ using CoreService_Core.Service.Interface;
 
 namespace CoreService_Core.Infrastructure
 {
-    public class QueueManager
+    public class QueueManager : IQueueManager
     {
         private readonly IResponseService _responseService;
+        private const int SecondsPerAction = 60;
 
         public QueueManager(IResponseService responseService)
         {
             _responseService = responseService ?? throw new ArgumentNullException(nameof(responseService));
         }
 
-        public async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto> resourceList, HttpClient client, ILogger<Worker> logger)
+        public async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto>? resourceList, HttpClient client, ILogger<Worker> logger)
         {
             var availableResources = new List<ResourceDto>();
+
+            if (resourceList == null)
+            {
+                return availableResources;
+            }
 
             foreach (var resource in resourceList)
             {
@@ -42,14 +48,14 @@ namespace CoreService_Core.Infrastructure
 
                 logger.LogInformation("[{status}] Resource {name} was skipped, left time to refresh: {timeLeft}", "SKIP", resource.Name, resource.TimeLeft);
                 
-                resource.TimeLeft -= TimeSpan.FromSeconds(60);
+                resource.TimeLeft -= TimeSpan.FromSeconds(SecondsPerAction);
                 availableResources.Add(resource);
 
             }
-
             logger.LogInformation("End loop");
             return availableResources;
         }
+
 
         private async Task<HttpResponseMessage?> GetHttpResponseMessageAsync(HttpClient client, ResourceDto resource, ILogger logger)
         {
@@ -59,11 +65,13 @@ namespace CoreService_Core.Infrastructure
                 return result;
             }
 
-            catch (UriFormatException)
+            catch (UriFormatException exception)
             {
                 logger.LogError(
                     "[{status}]An UriFormatException has occurred: the UrlAdress parameter value is an invalid URL. Please check if the parameter value is correctly formatted.",
                     "FAIL");
+
+                _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
                 return null;
             }
 

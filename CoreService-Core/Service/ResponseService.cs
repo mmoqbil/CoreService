@@ -20,8 +20,7 @@ namespace CoreService_Core.Service
 
         public void CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource)
         {
-            var statusCode = (int)httpStatusCode;
-            _dataManager.CreateResponse(statusCode, resource);
+            _dataManager.CreateResponse(httpStatusCode, resource);
         }
     }
 }

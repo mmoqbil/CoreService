@@ -15,7 +15,7 @@ namespace CoreService_Core.Service
 
         public ResponseService(IDataManager dataManager)
         {
-            _dataManager = dataManager;
+            _dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
         }
 
         public void CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource)

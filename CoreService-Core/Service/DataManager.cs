@@ -32,13 +32,8 @@ namespace CoreService_Core.Service
             var response = _mapper.Map<ResponseHandler>(resource);
             response.StatusCode = (int)statusCode;
 
-            if ((int)statusCode is > 200 and < 300)
-            {
-                response.ResponseStatus = ResponseStatus.Successful;
-            }
-
-            response.ResponseStatus = ResponseStatus.Fail;
-
+            response.ResponseStatus = (int)statusCode is > 200 and < 300 ? ResponseStatus.Successful : ResponseStatus.Fail;
+            
             await _responseRepository.CreateResponse(response);
         }
 
@@ -51,11 +46,13 @@ namespace CoreService_Core.Service
                 return resourcesDto;
             }
 
-            foreach (var resource in resources)
-            {
-                var resourceDto = _mapper.Map<ResourceDto>(resource);
-                resourcesDto.Add(resourceDto);
-            }
+            //foreach (var resource in resources)
+            //{
+            //    var resourceDto = _mapper.Map<ResourceDto>(resource);
+            //    resourcesDto.Add(resourceDto);
+            //}
+
+            resourcesDto.AddRange(resources.Select(resource => _mapper.Map<ResourceDto>(resource)));
 
             return resourcesDto;
         }

@@ -11,7 +11,7 @@ namespace CoreService_Core.Service.Repository
 
         public ResponseRepository(CoreDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task CreateResponse(ResponseHandler response)

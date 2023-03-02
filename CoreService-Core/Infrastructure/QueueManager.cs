@@ -1,5 +1,4 @@
 ﻿using CoreService_Core.Model.Dto;
-using CoreService_Core.Service;
 using CoreService_Core.Service.Interface;
 
 namespace CoreService_Core.Infrastructure
@@ -10,7 +9,7 @@ namespace CoreService_Core.Infrastructure
 
         public QueueManager(IResponseService responseService)
         {
-            _responseService = responseService;
+            _responseService = responseService ?? throw new ArgumentNullException(nameof(responseService));
         }
 
         public async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto> resourceList, HttpClient client, ILogger<Worker> logger)
@@ -60,7 +59,7 @@ namespace CoreService_Core.Infrastructure
                 return result;
             }
 
-            catch (UriFormatException exception)
+            catch (UriFormatException)
             {
                 logger.LogError(
                     "[{status}]An UriFormatException has occurred: the UrlAdress parameter value is an invalid URL. Please check if the parameter value is correctly formatted.",

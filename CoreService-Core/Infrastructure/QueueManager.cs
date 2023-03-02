@@ -1,46 +1,78 @@
-﻿using AutoMapper;
-using CoreService_Core.Model.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoreService_Core.Model.Dto;
+using CoreService_Core.Service;
+using CoreService_Core.Service.Interface;
 
 namespace CoreService_Core.Infrastructure
 {
     public class QueueManager
     {
-        public static async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto>? resourceList, HttpClient client, ILogger<Worker> logger)
-        {
-            //TODO: obsłużyć pustą liste _resourceList!
+        private readonly IResponseService _responseService;
 
+        public QueueManager(IResponseService responseService)
+        {
+            _responseService = responseService;
+        }
+
+        public async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto> resourceList, HttpClient client, ILogger<Worker> logger)
+        {
             var availableResources = new List<ResourceDto>();
+
             foreach (var resource in resourceList)
             {
                 if (resource.TimeLeft <= TimeSpan.Zero)
                 {
                     resource.TimeLeft = resource.Refresh;
-                    availableResources.Add(resource);
-                    var result = await client.GetAsync(resource.UrlAdress);
+                    var result = await GetHttpResponseMessageAsync(client, resource, logger);
+
+                    if (result == null)
+                    {
+                        continue;
+                    }
+
                     if (result.IsSuccessStatusCode)
                     {
-                        logger.LogInformation("[{status}]the status code was: {statusCode}, time: {time}, name: {name}", "SUCCESS", result.StatusCode, DateTime.Now, resource.Name);
+                        logger.LogInformation("[{status}]The status code was: {statusCode}, time: {time}, name: {name}", "SUCCESS", result.StatusCode, DateTime.Now, resource.Name);
+                        _responseService.CreateResponseHandler(result.StatusCode, resource);
                     }
+
                     else
                     {
-                        logger.LogError("[{status}]the website is down. status code {statusCode}", "SUCCESS", result.StatusCode);
+                        logger.LogError("[{status}]The website is down. status code {statusCode}", "SUCCESS", result.StatusCode);
                     }
                 }
-                else
-                {
-                    logger.LogInformation("[{status}] Resource {name} was skipped, left time to refresh: {timeLeft}", "SKIP", resource.Name, resource.TimeLeft);
-                    resource.TimeLeft -= TimeSpan.FromSeconds(60);
-                    availableResources.Add(resource);
-                }
+
+                logger.LogInformation("[{status}] Resource {name} was skipped, left time to refresh: {timeLeft}", "SKIP", resource.Name, resource.TimeLeft);
                 
+                resource.TimeLeft -= TimeSpan.FromSeconds(60);
+                availableResources.Add(resource);
+
             }
+
             logger.LogInformation("End loop");
             return availableResources;
+        }
+
+        private async Task<HttpResponseMessage?> GetHttpResponseMessageAsync(HttpClient client, ResourceDto resource, ILogger logger)
+        {
+            try
+            {
+                var result = await client.GetAsync(resource.UrlAdress);
+                return result;
+            }
+
+            catch (UriFormatException exception)
+            {
+                logger.LogError(
+                    "[{status}]An UriFormatException has occurred: the UrlAdress parameter value is an invalid URL. Please check if the parameter value is correctly formatted.",
+                    "FAIL");
+                return null;
+            }
+
+            catch (HttpRequestException exception)
+            {
+                logger.LogError("[{status}]An HttpRequestException has occurred while retrieving the resource from the URL {Url}: {Message}.", "FAIL", resource.UrlAdress, exception.Message);
+                return null;
+            }
         }
     }
 }

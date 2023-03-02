@@ -15,8 +15,7 @@ namespace CoreService_backend.Models.Enitities
         [ForeignKey(nameof(Resource))]
         public string ResourceId { get; set; }
 
-        [Required]
-        public int StatusCode { get; set; }
+        public int? StatusCode { get; set; }
 
         [Required]
         public ResponseStatus ResponseStatus { get; set; }

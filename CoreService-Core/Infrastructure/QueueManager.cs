@@ -37,7 +37,7 @@ namespace CoreService_Core.Infrastructure
                     if (result.IsSuccessStatusCode)
                     {
                         logger.LogInformation("[{status}]The status code was: {statusCode}, time: {time}, name: {name}", "SUCCESS", result.StatusCode, DateTime.Now, resource.Name);
-                        _responseService.CreateResponseHandler(result.StatusCode, resource);
+                        await _responseService.CreateResponseHandler(result.StatusCode, resource);
                     }
 
                     else
@@ -71,13 +71,14 @@ namespace CoreService_Core.Infrastructure
                     "[{status}]An UriFormatException has occurred: the UrlAdress parameter value is an invalid URL. Please check if the parameter value is correctly formatted.",
                     "FAIL");
 
-                _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
+                await _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
                 return null;
             }
 
             catch (HttpRequestException exception)
             {
                 logger.LogError("[{status}]An HttpRequestException has occurred while retrieving the resource from the URL {Url}: {Message}.", "FAIL", resource.UrlAdress, exception.Message);
+                
                 return null;
             }
         }

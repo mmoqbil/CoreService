@@ -5,8 +5,8 @@ namespace CoreService_Core.Service.Interface
 {
     public interface IResponseService
     {
-        public void CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource);
+        public Task CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource);
 
-        public void CreateResponseHandlerWithErrorMessage(ResourceDto resource, string errorMessage);
+        public Task CreateResponseHandlerWithErrorMessage(ResourceDto resource, string errorMessage);
     }
 }

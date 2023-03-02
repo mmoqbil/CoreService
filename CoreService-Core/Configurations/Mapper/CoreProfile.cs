@@ -15,7 +15,7 @@ namespace CoreService_Core.Configurations.Mapper
             CreateMap<ResourceDto, ResponseHandler>()
                 .ForMember(dest => dest.ResourceId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.DateTime, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

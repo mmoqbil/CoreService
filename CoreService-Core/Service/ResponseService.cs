@@ -16,14 +16,14 @@ namespace CoreService_Core.Service
             _dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
         }
 
-        public void CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource)
+        public async Task CreateResponseHandler(HttpStatusCode httpStatusCode, ResourceDto resource)
         {
-            _dataManager.CreateResponse(httpStatusCode, resource);
+            await _dataManager.CreateResponse(httpStatusCode, resource);
         }
 
-        public void CreateResponseHandlerWithErrorMessage(ResourceDto resource, string errorMessage)
+        public async Task CreateResponseHandlerWithErrorMessage(ResourceDto resource, string errorMessage)
         {
-            _dataManager.CreateResponseWithErrorMessage(resource, errorMessage);
+            await _dataManager.CreateResponseWithErrorMessage(resource, errorMessage);
         }
     }
 }

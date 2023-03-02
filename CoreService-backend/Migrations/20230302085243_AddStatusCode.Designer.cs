@@ -4,6 +4,7 @@ using CoreService_backend.Data.ApiDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreServicebackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230302085243_AddStatusCode")]
+    partial class AddStatusCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,7 +85,7 @@ namespace CoreServicebackend.Migrations
                     b.Property<int>("ResponseStatus")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StatusCode")
+                    b.Property<int>("StatusCode")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -120,21 +123,21 @@ namespace CoreServicebackend.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "14118e9f-ffdd-46cc-bc16-8e10cc785991",
+                            ConcurrencyStamp = "cd1cad56-ce28-4ef0-9938-4fa8f5005a69",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "cc8bcf51-7a24-47d8-8c9c-d6d5ad98a788",
+                            ConcurrencyStamp = "72553808-e4c3-4e80-bea0-06c84a701cab",
                             Name = "SuperUser",
                             NormalizedName = "SUPERUSER"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "d7ae1e8a-92b0-4c32-a3a1-90406d9b02de",
+                            ConcurrencyStamp = "61882856-fcdd-4a29-9525-1c19da39d271",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -232,43 +235,43 @@ namespace CoreServicebackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5e8a4d2a-b929-448f-97e8-572d1e9ce2d4",
+                            Id = "ed0dc3e1-f1d2-4362-80f7-aaa8d2ca9a8e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d76d63fe-868e-4da7-846f-edf49004fd3e",
+                            ConcurrencyStamp = "fcc14665-9bc9-4319-b9af-7d631107cf90",
                             Email = "johndoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAENtsjLSQwlMzB8nb2Vsvj1uunQlSONofbQlukC9ma2bvbMW0DvG7mL+G8Xsn/y1egQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECJjROxgMt+PJ+Gvm/JAjsy1GHadezyyaMWVyEMGJYnQ9806Rpo86m7+oXGdY92Csg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9fdcb622-107d-4378-a0b4-8b282a37b9c1",
+                            SecurityStamp = "edef7571-8123-43d4-8f89-fc96c4991e95",
                             TwoFactorEnabled = false,
                             UserName = "johndoe"
                         },
                         new
                         {
-                            Id = "87492aa7-31bd-4bd6-a88f-a742d87c1dde",
+                            Id = "c0dbb824-4334-4bc8-a413-a0bd67b16d5c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b3a1f911-2e8d-4481-9689-f63e8298592f",
+                            ConcurrencyStamp = "4cb51958-5de2-4daa-a732-542e5f94420c",
                             Email = "adam@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEG2Igaxoh5npjdLEitGYBnD0MclMh8fKX2baemYGWQsGReHIOL3CV3frM2ZIwA0Tzw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN+QlerKjV0mIQXy7Np4dwl3n5PX8P6E1lXaiTy22suQxSTgk5/RQcnGbRBIv1JY6w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bda0686a-88b4-4e2c-ad75-5107da0e2be6",
+                            SecurityStamp = "9f8e8a64-e821-4a6d-bcc9-64afd2956b8f",
                             TwoFactorEnabled = false,
                             UserName = "Adam"
                         },
                         new
                         {
-                            Id = "648d91c7-8607-43ff-b61a-e7c0dbab83c3",
+                            Id = "795668a8-86a6-4b60-ab54-9c7d0421b709",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8d93e184-821a-4632-a27d-86c302736169",
+                            ConcurrencyStamp = "6ded813e-04bc-4fbf-97f8-d41a22adf1d3",
                             Email = "judasz@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEGJwPzr2AWsp4frN7mFTvxKM0Y7THw+n2Ue3mIjs6Lb/4csz8Ao/MfJWNEU64jYcPQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAf5/9uy/TnTn9AqqEnQ1ks9Cwp2hXLjP/TXkIJAiX8sHLyXV0bPylI6qCW3zciJRA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1a3ea885-4888-4964-aeb2-c7427d73dcaa",
+                            SecurityStamp = "d59ae1e7-b1cc-409a-b1f3-935a566c0f8f",
                             TwoFactorEnabled = false,
                             UserName = "Judasz"
                         });

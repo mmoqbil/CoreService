@@ -1,4 +1,5 @@
 using CoreService_Core;
+using CoreService_Core.Configurations.Extensions;
 using CoreService_Core.Data.CoreDbContext;
 using CoreService_Core.Infrastructure;
 using CoreService_Core.Service;
@@ -15,43 +16,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console() // TODO: Change to file .WriteTo.File(Path)
     .CreateLogger();
 
-try
-{
-    Log.Information("Starting up the service");
-    CreateHostBuilder(args).Build().Run();
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "The service failed to start up properly...");
-}
-finally
-{
-    Log.Information("Shutting down the service...");
-    Log.CloseAndFlush();
-}
+WorkerServiceRunner.StartWorkerService(args);
 
 
-static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        .UseWindowsService()
-        .ConfigureServices((hostContext, services) =>
-        {
-            var configuration = hostContext.Configuration;
-            services.AddDbContext<CoreDbContext>(opt =>
-                {
-                    opt.UseSqlServer(configuration.GetConnectionString("CoreServiceConnection"));
-                },
-                ServiceLifetime.Singleton
-            );
 
-            services.AddSingleton<IResourceRepository, ResourceRepository>();
-            services.AddSingleton<IResponseRepository, ResponseRepository>();
-            services.AddSingleton<IResponseService, ResponseService>();
-            services.AddSingleton<IDataManager, DataManager>();
-            services.AddSingleton<IQueueManager, QueueManager>();
-            
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddHostedService<Worker>();
-        })
-        .UseSerilog();

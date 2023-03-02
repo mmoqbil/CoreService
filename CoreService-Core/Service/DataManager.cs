@@ -32,7 +32,7 @@ namespace CoreService_Core.Service
             var response = _mapper.Map<ResponseHandler>(resource); // TODO: crash here 
             response.StatusCode = (int)statusCode;
 
-            response.ResponseStatus = (int)statusCode is > 200 and < 300 ? ResponseStatus.Successful : ResponseStatus.Fail;
+            response.ResponseStatus = (int)statusCode is >= 200 and < 300 ? ResponseStatus.Successful : ResponseStatus.Fail;
             
             await _responseRepository.CreateResponse(response);
         }

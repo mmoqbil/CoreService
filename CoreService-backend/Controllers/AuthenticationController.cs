@@ -1,12 +1,6 @@
-﻿using CoreService_backend.Configurations.Jwt;
-using CoreService_backend.Dtos;
+﻿using CoreService_backend.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using CoreService_backend.Infrastructure;
 using CoreService_backend.Models.Result;
 
@@ -119,10 +113,16 @@ namespace CoreService_backend.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, userDto.Password))
             {
                 // user doesn't exist or incorrect password
-                return Unauthorized(userDto);
+                return Unauthorized();
             }
 
             var roles = await _userManager.GetRolesAsync(user);
+
+            if (!roles.Contains("Admin"))
+            {
+                // user hasn't Admin role
+                return Forbid();
+            }
 
             return Ok(new AuthResult(true, _authenticationManager.GenerateJwtToken(user, roles)));
         }

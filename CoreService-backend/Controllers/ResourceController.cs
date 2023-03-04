@@ -20,7 +20,8 @@ public class ResourceController : ControllerBase
         _resources = resource ?? throw new ArgumentNullException(nameof(resource));
     }
 
-    [HttpGet("all")]
+    [HttpGet("admin")]
+    [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetResources()
     {

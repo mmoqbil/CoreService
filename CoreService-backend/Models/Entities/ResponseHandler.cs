@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using CoreService_Core.Model.Enum;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using CoreService_backend.Models.Enum;
 
-namespace CoreService_Core.Model.Entities;
+namespace CoreService_backend.Models.Entities;
 
+[Table("Response")]
 public class ResponseHandler
 {
     [Key]

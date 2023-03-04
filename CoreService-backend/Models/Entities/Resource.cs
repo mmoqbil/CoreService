@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using CoreService_Core.Model.Enum;
+using CoreService_backend.Models.Enum;
+using Microsoft.AspNetCore.Identity;
 
-namespace CoreService_Core.Model.Dto;
+namespace CoreService_backend.Models.Entities;
 
-public class ResourceDto
+[Table("Resources")]
+public class Resource
 {
     [Key]
     public string Id { get; set; }
@@ -22,6 +23,8 @@ public class ResourceDto
     [ForeignKey(nameof(IdentityUser))]
     public string UserId { get; set; }
 
+    public virtual IdentityUser User { get; set; }
+
     [Required]
     public TimeSpan Refresh { get; set; }
 
@@ -29,6 +32,5 @@ public class ResourceDto
     public RequestType RequestType { get; set; }
 
     [Required]
-    public TimeSpan TimeLeft { get; set; }
-
+    public DateTime CreationTime { get; set; }
 }

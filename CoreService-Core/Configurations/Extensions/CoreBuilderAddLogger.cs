@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreService_Core.Configurations.Extenstions
+namespace CoreService_Core.Configurations.Extensions
 {
     internal class CoreBuilderAddLogger
     {

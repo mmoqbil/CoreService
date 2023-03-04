@@ -1,13 +1,11 @@
-﻿using CoreService_backend.Models.Dtos;
-using CoreService_backend.Models.Enitities;
+﻿using CoreService_backend.Models.Entities;
 
-namespace CoreService_backend.Services.Api.Response
+namespace CoreService_backend.Services.Api.Response;
+
+public interface IResponseService
 {
-    public interface IResponseService
-    {
-        Task<IEnumerable<ResponseHandler>?> GetResponses();
-        Task<ResponseHandler?> GetResponseById(int responseId);
-        Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string userId);
-        Task<bool> RemoveResponse(int responseId);
-    }
+    Task<IEnumerable<ResponseHandler>?> GetResponses();
+    Task<ResponseHandler?> GetResponseById(int responseId);
+    Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string userId);
+    Task<bool> RemoveResponse(int responseId);
 }

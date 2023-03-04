@@ -2,35 +2,34 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CoreService_backend.Configurations.Extensions
+namespace CoreService_backend.Configurations.Extensions;
+
+public static class WebApplicationBuilderAddAuthenticationExtension
 {
-    public static class WebApplicationBuilderAddAuthenticationExtension
+    public static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
     {
-        public static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
-        {
-            builder.Services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(jwt =>
-                {
-                    var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
+        builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt =>
+            {
+                var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
 
-                    jwt.SaveToken = true;
-                    jwt.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false, // only for Dev
-                        ValidateAudience = false, // only for dev
-                        RequireExpirationTime = false, //for dev -> need to be updated when refresh token is added
-                        ValidateLifetime = true
-                    };
-                });
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false, // only for Dev
+                    ValidateAudience = false, // only for dev
+                    RequireExpirationTime = false, //for dev -> need to be updated when refresh token is added
+                    ValidateLifetime = true
+                };
+            });
 
-            return builder;
-        }
+        return builder;
     }
 }

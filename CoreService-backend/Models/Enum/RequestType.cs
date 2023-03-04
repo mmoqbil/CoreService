@@ -1,9 +1,8 @@
-﻿namespace CoreService_backend.Models.Enum
+﻿namespace CoreService_backend.Models.Enum;
+
+public enum RequestType
 {
-    public enum RequestType
-    {
-        http,
-        https,
-        ping,
-    }
+    http,
+    https,
+    ping,
 }

@@ -1,9 +1,7 @@
-﻿namespace CoreService_backend.Models.Enum
-{
-    public enum ResponseStatus
-    {
-        Successful = 1,
-        Fail = 0,
-    }
-}
+﻿namespace CoreService_Core.Model.Enum;
 
+public enum ResponseStatus
+{
+    Successful = 1,
+    Fail = 0,
+}

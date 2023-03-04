@@ -1,12 +1,11 @@
-﻿namespace CoreService_backend.Configurations.Extensions
-{
-    public static class WebApplicationBuilderAddMapperExtension
-    {
-        public static WebApplicationBuilder AddMapper(this WebApplicationBuilder builder)
-        {
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+﻿namespace CoreService_backend.Configurations.Extensions;
 
-            return builder;
-        }
+public static class WebApplicationBuilderAddMapperExtension
+{
+    public static WebApplicationBuilder AddMapper(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        return builder;
     }
 }

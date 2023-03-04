@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CoreService_Core.Model.Entities;
+﻿using CoreService_Core.Model.Entities;
 
-namespace CoreService_Core.Service.Interface
+namespace CoreService_Core.Service.Interface;
+
+public interface IResourceRepository
 {
-    public interface IResourceRepository
-    {
-        public Task<IEnumerable<Resource>?> GetAllResourceAsync();
+    public Task<IEnumerable<Resource>?> GetAllResourceAsync();
 
-    }
 }

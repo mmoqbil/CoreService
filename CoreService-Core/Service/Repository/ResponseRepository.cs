@@ -2,22 +2,21 @@
 using CoreService_Core.Model.Entities;
 using CoreService_Core.Service.Interface;
 
-namespace CoreService_Core.Service.Repository
+namespace CoreService_Core.Service.Repository;
+
+public class ResponseRepository : IResponseRepository
 {
-    public class ResponseRepository : IResponseRepository
+    private readonly CoreDbContext _context;
+
+
+    public ResponseRepository(CoreDbContext context)
     {
-        private readonly CoreDbContext _context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
 
-
-        public ResponseRepository(CoreDbContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        public async Task CreateResponse(ResponseHandler response)
-        {
-            await _context.Response.AddAsync(response);
-            await _context.SaveChangesAsync();
-        }
+    public async Task CreateResponse(ResponseHandler response)
+    {
+        await _context.Response.AddAsync(response);
+        await _context.SaveChangesAsync();
     }
 }

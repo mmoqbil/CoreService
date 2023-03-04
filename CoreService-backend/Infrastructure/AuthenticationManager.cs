@@ -13,6 +13,7 @@ public class AuthenticationManager : IAuthenticationManager
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IOptions<JwtConfig> _jwtConfig;
+    private const int TokenExpirationTimeInMinutes = 120;
 
     public AuthenticationManager(UserManager<IdentityUser> userManager, IOptions<JwtConfig> jwtConfig)
     {
@@ -50,7 +51,7 @@ public class AuthenticationManager : IAuthenticationManager
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = subject,
-            Expires = DateTime.Now.AddHours(2), //TODO: Change to 30 minutes
+            Expires = DateTime.Now.AddMinutes(TokenExpirationTimeInMinutes), //TODO: Change to 30 minutes
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
         };
 

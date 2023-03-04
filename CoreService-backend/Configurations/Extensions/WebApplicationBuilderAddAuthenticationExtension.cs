@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using CoreService_backend.Auth;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 

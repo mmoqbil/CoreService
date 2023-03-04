@@ -4,9 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CoreService_backend.Configurations.Jwt;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using CoreService_backend.Configurations.Extensions;
 
 namespace CoreService_backend.Infrastructure
 {
@@ -23,9 +23,9 @@ namespace CoreService_backend.Infrastructure
 
         public async Task<bool> ValidateApiUser(UserLoginRequestDto userDto)
         {
-            var _user = await _userManager.FindByEmailAsync(userDto.Email);
+            var user = await _userManager.FindByEmailAsync(userDto.Email);
 
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
+            return (user != null && await _userManager.CheckPasswordAsync(user, userDto.Password));
         }
 
         public string GenerateJwtToken(IdentityUser user, IList<string> roles)

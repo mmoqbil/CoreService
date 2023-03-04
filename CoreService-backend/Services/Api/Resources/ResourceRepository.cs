@@ -27,7 +27,7 @@ namespace CoreService_backend.Services.Api.Resources
             _context.Resources.Remove(resource);
         }
 
-        public Resource CreateResource(ResourceDto resourceDto, string? userId)
+        public Resource CreateResource(ResourceDto resourceDto, string userId)
         {
             var resourceWithTimeDto = _mapper.Map<ResourceWithTimeDto>(resourceDto);
             var resource = _mapper.Map<Resource>(resourceWithTimeDto);

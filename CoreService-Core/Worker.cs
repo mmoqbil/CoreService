@@ -1,6 +1,5 @@
 using CoreService_Core.Infrastructure;
 using CoreService_Core.Model.Dto;
-using CoreService_Core.Model.Entities;
 using CoreService_Core.Service.Interface;
 
 namespace CoreService_Core

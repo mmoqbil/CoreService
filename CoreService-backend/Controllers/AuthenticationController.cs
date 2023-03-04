@@ -23,8 +23,8 @@ namespace CoreService_backend.Controllers
 
         public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager)
         {
-            _userManager = userManager;
-            _authenticationManager = authenticationManager;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
         }
 
 

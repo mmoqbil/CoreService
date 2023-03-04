@@ -17,8 +17,8 @@ namespace CoreService_backend.Infrastructure
 
         public AuthenticationManager(UserManager<IdentityUser> userManager, IOptions<JwtConfig> jwtConfig)
         {
-            _userManager = userManager;
-            _jwtConfig = jwtConfig;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _jwtConfig = jwtConfig ?? throw new ArgumentNullException(nameof(jwtConfig));
         }
 
         public async Task<bool> ValidateApiUser(UserLoginRequestDto userDto)

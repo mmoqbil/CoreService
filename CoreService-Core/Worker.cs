@@ -19,7 +19,7 @@ namespace CoreService_Core
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
-            _queueManager = queueManager;
+            _queueManager = queueManager ?? throw new ArgumentNullException(nameof(queueManager));
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

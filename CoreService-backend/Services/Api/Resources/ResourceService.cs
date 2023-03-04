@@ -9,7 +9,7 @@ namespace CoreService_backend.Services.Api.Resources
 
         public ResourceService(IResourceRepository resourceRepository)
         {
-            _repository = resourceRepository;
+            _repository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
         public async Task<IEnumerable<Resource>?> GetResources()

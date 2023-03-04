@@ -22,7 +22,7 @@ namespace CoreService_backend.Controllers
 
         public ResponseController(IResponseService response)
         {
-            _response = response;
+            _response = response ?? throw new ArgumentNullException(nameof(response));
         }
 
         // TODO: Implement endpoints for response

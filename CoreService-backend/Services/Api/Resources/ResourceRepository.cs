@@ -13,8 +13,8 @@ namespace CoreService_backend.Services.Api.Resources
 
         public ResourceRepository(AppDbContext context, IMapper mapper)
         {
-            _context = context;
-            _mapper = mapper;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<IEnumerable<Resource>?> GetResources()

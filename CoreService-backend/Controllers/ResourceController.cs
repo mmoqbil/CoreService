@@ -21,7 +21,7 @@ namespace CoreService_backend.Controllers
 
         public ResourceController(IResourceService resource)
         {
-            _resources = resource;
+            _resources = resource ?? throw new ArgumentNullException(nameof(resource));
         }
 
         [HttpGet("all")]

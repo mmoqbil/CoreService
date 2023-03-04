@@ -5,6 +5,7 @@
         public string Token { get; set; }
         public bool Result { get; set; }
         public List<string> Errors { get; set; }
+        private string userId { get; set; }
 
         public AuthResult(bool result, List<string> errors)
         {

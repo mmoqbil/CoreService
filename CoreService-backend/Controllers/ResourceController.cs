@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using CoreService_backend.Models.Dtos;
+using CoreService_backend.Models.Entities;
 using CoreService_backend.Services.Api.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
 namespace CoreService_backend.Controllers;
@@ -44,6 +46,8 @@ public class ResourceController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [Route("{userId}/{resourceId}")]
     public async Task<IActionResult> GetResource(string resourceId)
     {
@@ -62,6 +66,9 @@ public class ResourceController : ControllerBase
 
     [HttpPut]
     [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [Route("{resourceId}")]
     public async Task<IActionResult> UpdateResource([FromBody] ResourceUpdateDto updatedResource)
     {
@@ -84,6 +91,10 @@ public class ResourceController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [Route("{resourceId}")]
     public async Task<IActionResult> DeleteResource(string resourceId)
     {
@@ -113,6 +124,9 @@ public class ResourceController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateResource([FromBody] ResourceDto resourceDto)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -126,8 +140,9 @@ public class ResourceController : ControllerBase
 
         if (resource is null)
         {
-            return BadRequest("Error - Resource not created.");
+            return Problem(statusCode: 500, detail: "Something gone wrong");
         }
+
         //TODO: Returned resource should be ResourceDto not Resource!
         return Ok(resource); // TODO: Rebuild to CreatedAtRoute
     }

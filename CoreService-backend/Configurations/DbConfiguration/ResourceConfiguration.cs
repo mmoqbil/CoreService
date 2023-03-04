@@ -50,13 +50,6 @@ public class ResourceConfiguration : IEntityTypeConfiguration<Resource>
                 UrlAdress = "175.189.43.59",
                 Name = "Coffee website",
                 UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
-            },
-            new Resource
-            {
-                Id = "7",
-                UrlAdress = "148.143.234.67",
-                Name = "My car rent website",
-                UserId = "3d24fe63-559f-4302-93e0-693a4b12c9be",
             }
         );
     }

@@ -3,7 +3,7 @@ using CoreService_backend.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreService_backend.Data.ApiDbContext;
+namespace CoreService_backend.DataAccess;
 
 public class AppDbContext : IdentityDbContext
 {
@@ -20,6 +20,8 @@ public class AppDbContext : IdentityDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        string migrationsDirectory = @"Migrations\";
+
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder

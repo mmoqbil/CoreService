@@ -26,10 +26,11 @@ namespace CoreService_backend.Controllers
 
         [HttpGet("all")]
         [Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<Resource>?> GetResources()
+        public async Task<IActionResult> GetResources()
         {
-            return await _resources.GetResources();
+            return Ok(await _resources.GetResources());
         }
+
 
         [HttpGet]
         [Authorize(Roles = "User")]
@@ -37,42 +38,54 @@ namespace CoreService_backend.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId == null)
+            if (userId != null)
             {
-                return Ok(Enumerable.Empty<ResourceDto>());
+                //TODO: returned resource should have resourceId
+                return Ok(await _resources.GetResourcesByUserId(userId));
             }
-            //TODO: returned resource should have resourceId
-            return Ok(await _resources.GetResourcesByUserId(userId));
+
+            return Ok(Enumerable.Empty<ResourceDto>());
         }
+
 
         [HttpGet]
         [Authorize(Roles = "User")]
         [Route("{userId}/{resourceId}")]
-        public async Task<Resource?> GetResource(string resourceId)
+        public async Task<IActionResult> GetResource(string resourceId)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId == resourceId)
+            if (userId != resourceId)
             {
-                //TODO: returned resource should have resourceId
-                return await _resources.GetResourceById(resourceId);
+
+                return Unauthorized();
             }
 
-            return null;
+            //TODO: returned resource should have resourceId
+            return Ok(await _resources.GetResourceById(resourceId));
         }
 
 
         [HttpPut]
         [Authorize(Roles = "User")]
         [Route("{resourceId}")]
-        public async Task UpdateResource([FromBody] ResourceUpdateDto updatedResource)
+        public async Task<IActionResult> UpdateResource([FromBody] ResourceUpdateDto updatedResource)
         {
+            if (!ModelState.IsValid)
+            {
+                // bad request because input is invalid 
+                return BadRequest(ModelState);
+            }
+
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId == updatedResource.UserId)
+            if (userId != updatedResource.UserId)
             {
-                await _resources.UpdateResource(updatedResource);
+                return Unauthorized();
             }
+
+            await _resources.UpdateResource(updatedResource);
+            return NoContent();
         }
 
         [HttpDelete]
@@ -81,6 +94,12 @@ namespace CoreService_backend.Controllers
         public async Task<IActionResult> DeleteResource(string resourceId)
         {
             var resource = await _resources.GetResourceById(resourceId);
+
+            if (!ModelState.IsValid)
+            {
+                // bad request because input is invalid 
+                return BadRequest(ModelState);
+            }
 
             if (resource is null)
             {
@@ -102,16 +121,16 @@ namespace CoreService_backend.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateResource([FromBody] ResourceDto resourceDto)
         {
-            if (!ModelState.IsValid)
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (!ModelState.IsValid || userId is null)
             {
                 return BadRequest(ModelState);
             }
 
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
             var resource = await _resources.CreateResource(resourceDto, userId);
 
-            if (resource == null)
+            if (resource is null)
             {
                 return BadRequest("Error - Resource not created.");
             }

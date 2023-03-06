@@ -11,4 +11,5 @@ public interface IResourceService
     Task<Resource?> CreateResource(ResourceCreateDto resource, string userId);
     Task<bool> RemoveResource(string resourceId);
     Task UpdateResource(ResourceUpdateDto resource);
+    Task<bool> CheckResourceExists(string resourceId);
 }

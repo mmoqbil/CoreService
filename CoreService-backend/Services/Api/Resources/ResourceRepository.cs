@@ -64,4 +64,9 @@ public class ResourceRepository : IResourceRepository
     {
         return await _context.SaveChangesAsync() > 0;
     }
+
+    public async Task<bool> CheckResourceExist(string resourceId)
+    {
+        return await _context.Resources.AnyAsync(r => r.Id == resourceId);
+    }
 }

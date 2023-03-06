@@ -12,4 +12,5 @@ public interface IResourceRepository
     Task<Resource?> GetResourceById(string id);
     Task<IEnumerable<ResourceDto>?> GetResourcesByUserId(string userId);
     Task<bool> SaveChanges();
+    Task<bool> CheckResourceExist(string resourceId);
 }

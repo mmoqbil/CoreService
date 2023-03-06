@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using CoreService_backend.Models.Dtos;
 using CoreService_backend.Models.Entities;
 using CoreService_backend.Services.Api.Resources;
@@ -17,6 +16,7 @@ public class ResponseController : ControllerBase
     private readonly IResponseService _response;
     private readonly IResourceService _resource;
 
+
     public ResponseController(IResponseService response, IResourceService resource)
     {
         _response = response ?? throw new ArgumentNullException(nameof(response));
@@ -32,6 +32,7 @@ public class ResponseController : ControllerBase
     {
         return Ok(await _response.GetResponses());
     }
+
 
     [HttpGet]
     [Authorize(Roles = "Admin")]
@@ -50,6 +51,7 @@ public class ResponseController : ControllerBase
     {
         return Ok(await _response.GetResponseById(responseId));
     }
+
 
     [HttpGet]
     [Authorize(Roles = "User")]
@@ -70,9 +72,9 @@ public class ResponseController : ControllerBase
             return Ok(Enumerable.Empty<ResourceDto>());
         }
 
-        // SMTH DO NOT WORKING 
         return Ok(await _response.GetResponseByUserId(resources));
     }
+
 
     [HttpGet]
     //[Authorize(Roles = "User")]
@@ -93,5 +95,28 @@ public class ResponseController : ControllerBase
         }
 
         return Ok(await _response.GetResponseByResourceId(resourceId));
+    }
+
+
+    [HttpGet]
+    [Route("{resourceId}/{responseId:int}")]
+    public async Task<IActionResult> GetResponseById(string resourceId, int responseId)
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var resourceExists = await _resource.CheckResourceExists(resourceId);
+
+        if (userId == null || resourceExists)
+        {
+            return BadRequest();
+        }
+
+        var response = await _response.GetResponseById(responseId);
+
+        if (response == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(response);
     }
 }

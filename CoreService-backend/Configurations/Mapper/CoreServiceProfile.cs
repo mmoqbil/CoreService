@@ -24,5 +24,7 @@ public class CoreServiceProfile : Profile
 
         CreateMap<ResourceDto, ResourceWithTimeDto>()
             .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => DateTime.Now));
+
+        CreateMap<ResponseHandlerDto, ResponseHandler>();
     }
 }

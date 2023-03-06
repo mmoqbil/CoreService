@@ -56,4 +56,9 @@ public class ResourceService : IResourceService
         _repository.UpdateResource(Resource);
         await _repository.SaveChanges();
     }
+
+    public async Task<bool> CheckResourceExists(string resourceId)
+    {
+        return await _repository.CheckResourceExist(resourceId);
+    }
 }

@@ -10,4 +10,5 @@ public interface IResponseService
     Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string resourceId);
     Task<List<ResponseHandler>> GetResponseByUserId(IEnumerable<ResourceDto> resources);
     Task<bool> RemoveResponse(int responseId);
+    Task CreateResponseHandler(ResponseHandlerDto responseHandler);
 }

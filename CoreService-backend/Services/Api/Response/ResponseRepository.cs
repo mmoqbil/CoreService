@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CoreService_backend.DataAccess;
+using CoreService_backend.Models.Dtos;
 using CoreService_backend.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,5 +46,11 @@ public class ResponseRepository : IResponseRepository
     public async Task<bool> SaveChanges()
     {
         return await _context.SaveChangesAsync() > 0;
+    }
+
+    public async Task CreateResponseHandler(ResponseHandlerDto responseHandlerDto)
+    {
+        var responseHandler = _mapper.Map<ResponseHandler>(responseHandlerDto);
+        await _context.AddAsync(responseHandler);
     }
 }

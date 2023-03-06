@@ -5,7 +5,7 @@ using CoreService_backend.Models.Enum;
 
 namespace CoreService_backend.Models.Dtos;
 
-public class ResourceDto
+public class ResourceCreateDto
 {
     [Required]
     [MaxLength(256)]
@@ -20,6 +20,11 @@ public class ResourceDto
 
     [Required]
     public RequestType RequestType { get; set; }
+}
+
+public class ResourceDto : ResourceCreateDto
+{
+    public string Id { get; set; }
 }
 
 public class ResourceWithTimeDto : ResourceDto

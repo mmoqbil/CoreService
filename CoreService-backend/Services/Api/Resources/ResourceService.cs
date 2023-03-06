@@ -1,4 +1,5 @@
-﻿using CoreService_backend.Models.Dtos;
+﻿using AutoMapper;
+using CoreService_backend.Models.Dtos;
 using CoreService_backend.Models.Entities;
 
 namespace CoreService_backend.Services.Api.Resources;
@@ -6,10 +7,12 @@ namespace CoreService_backend.Services.Api.Resources;
 public class ResourceService : IResourceService
 {
     private readonly IResourceRepository _repository;
+    private readonly IMapper _mapper;
 
-    public ResourceService(IResourceRepository resourceRepository)
+    public ResourceService(IResourceRepository resourceRepository, IMapper mapper)
     {
         _repository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     public async Task<IEnumerable<Resource>?> GetResources()
@@ -27,7 +30,7 @@ public class ResourceService : IResourceService
         return await _repository.GetResourcesByUserId(userId);
     }
 
-    public async Task<Resource?> CreateResource(ResourceDto resourceDto, string userId)
+    public async Task<Resource?> CreateResource(ResourceCreateDto resourceDto, string userId)
     {
         var resource = _repository.CreateResource(resourceDto, userId);
         await _repository.SaveChanges();

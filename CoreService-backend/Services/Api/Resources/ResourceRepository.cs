@@ -27,7 +27,7 @@ public class ResourceRepository : IResourceRepository
         _context.Resources.Remove(resource);
     }
 
-    public Resource CreateResource(ResourceDto resourceDto, string userId)
+    public Resource CreateResource(ResourceCreateDto resourceDto, string userId)
     {
         var resourceWithTimeDto = _mapper.Map<ResourceWithTimeDto>(resourceDto);
         var resource = _mapper.Map<Resource>(resourceWithTimeDto);

@@ -56,7 +56,6 @@ public class ResourceController : ControllerBase
 
         if (userId != resourceId)
         {
-
             return Unauthorized();
         }
 
@@ -128,7 +127,7 @@ public class ResourceController : ControllerBase
     [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateResource([FromBody] ResourceDto resourceDto)
+    public async Task<IActionResult> CreateResource([FromBody] ResourceCreateDto resourceDto)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 

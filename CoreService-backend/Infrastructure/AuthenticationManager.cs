@@ -13,7 +13,7 @@ public class AuthenticationManager : IAuthenticationManager
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IOptions<JwtConfig> _jwtConfig;
-    private const int TokenExpirationTimeInMinutes = 120;
+    private const int TokenExpirationTimeInMinutes = 600;
 
     public AuthenticationManager(UserManager<IdentityUser> userManager, IOptions<JwtConfig> jwtConfig)
     {

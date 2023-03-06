@@ -7,7 +7,7 @@ public interface IResourceRepository
 {
     Task<IEnumerable<Resource>?> GetResources();
     void DeleteResource(Resource resource);
-    Resource CreateResource(ResourceDto resource, string userId);
+    Resource CreateResource(ResourceCreateDto resource, string userId);
     void UpdateResource(ResourceUpdateDto resource);
     Task<Resource?> GetResourceById(string id);
     Task<IEnumerable<ResourceDto>?> GetResourcesByUserId(string userId);

@@ -82,7 +82,15 @@ public class AuthenticationManager : IAuthenticationManager
 
     public async AuthenticationResult GenerateAuthenticationResultForUser(IdentityUser user)
     {
+        var jwtToken = await GenerateJwtToken(user);
 
+        var refreshToken = new RefreshToken
+
+        return new AuthenticationResult()
+        {
+            Success = true,
+            Token = jwtToken,
+        };
     }
 
     private ClaimsPrincipal? GetPrincipleFromToken(string token)

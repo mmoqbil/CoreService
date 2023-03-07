@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreService-backend", "CoreService-backend\CoreService-backend.csproj", "{6036C3E1-DC90-4038-92A6-BD7F50ACCEED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreService-API", "CoreService-backend\CoreService-API.csproj", "{6036C3E1-DC90-4038-92A6-BD7F50ACCEED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService-Core", "CoreService-Core\CoreService-Core.csproj", "{932722BD-2437-49DA-B465-4AFBC2FC3624}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreService-Service", "CoreService-Core\CoreService-Service.csproj", "{932722BD-2437-49DA-B465-4AFBC2FC3624}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

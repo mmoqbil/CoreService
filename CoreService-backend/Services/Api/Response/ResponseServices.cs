@@ -1,43 +1,41 @@
-﻿using CoreService_backend.Enitities;
-using CoreService_backend.Models.Enitities;
+﻿using CoreService_backend.Models.Entities;
 
-namespace CoreService_backend.Services.Api.Response
+namespace CoreService_backend.Services.Api.Response;
+
+public class ResponseServices : IResponseService
 {
-    public class ResponseServices : IResponseService
+    private readonly IResponseRepository _repository;
+
+    public ResponseServices(IResponseRepository repository)
     {
-        private readonly IResponseRepository _repository;
+        _repository = repository;
+    }
 
-        public ResponseServices(IResponseRepository repository)
+    public async Task<IEnumerable<ResponseHandler>?> GetResponses()
+    {
+        return await _repository.GetResponses();
+    }
+
+    public async Task<ResponseHandler?> GetResponseById(int responseId)
+    {
+        return await _repository.GetResponseById(responseId);
+    }
+
+    public async Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string userId)
+    {
+        return await _repository.GetResourcesByResourceId(userId);
+    }
+
+    public async Task<bool> RemoveResponse(int responseId)
+    {
+        var response = await _repository.GetResponseById(responseId);
+        if (response != null)
         {
-            _repository = repository;
+            _repository.DeleteResponse(response);
+            await _repository.SaveChanges();
+            return true;
         }
 
-        public async Task<IEnumerable<ResponseHandler>?> GetResponses()
-        {
-            return await _repository.GetResponses();
-        }
-
-        public async Task<ResponseHandler?> GetResponseById(int responseId)
-        {
-            return await _repository.GetResponseById(responseId);
-        }
-
-        public async Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string userId)
-        {
-            return await _repository.GetResourcesByResourceId(userId);
-        }
-
-        public async Task<bool> RemoveResponse(int responseId)
-        {
-            var response = await _repository.GetResponseById(responseId);
-            if (response != null)
-            {
-                _repository.DeleteResponse(response);
-                await _repository.SaveChanges();
-                return true;
-            }
-
-            return false;
-        }
+        return false;
     }
 }

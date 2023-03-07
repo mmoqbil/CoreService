@@ -7,13 +7,13 @@ namespace CoreService_Core.Infrastructure;
 public class QueueManager : IQueueManager
 {
     private readonly IResponseService _responseService;
-    private ResponseErrorEmail _errorEmail;
+    //private ResponseErrorEmail _errorEmail;
     private const int SecondsPerAction = 60;
 
-    public QueueManager(IResponseService responseService, ResponseErrorEmail errorEmail)
+    public QueueManager(IResponseService responseService)
     {
         _responseService = responseService ?? throw new ArgumentNullException(nameof(responseService));
-        _errorEmail = errorEmail ?? throw new ArgumentNullException(nameof(errorEmail));
+        //_errorEmail = errorEmail ?? throw new ArgumentNullException(nameof(errorEmail));
     }
 
     public async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto>? resourceList, HttpClient client, ILogger<Worker> logger)
@@ -46,7 +46,7 @@ public class QueueManager : IQueueManager
                 else
                 {
                     logger.LogError("[{status}]The website is down. status code {statusCode}", "SUCCESS", result.StatusCode);
-                    _errorEmail.SendEmailWithError(result.StatusCode, resource.Name);
+                    //_errorEmail.SendEmailWithError(result.StatusCode, resource.Name);
                 }
             }
 

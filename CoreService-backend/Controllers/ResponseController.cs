@@ -119,4 +119,12 @@ public class ResponseController : ControllerBase
 
         return Ok(response);
     }
+
+
+    [HttpPost]
+    public async Task CreateResponseHandler([FromBody] ResponseHandlerDto responseHandlerDto)
+    {
+        // VALIDATION TOKEN
+        await _response.CreateResponseHandler(responseHandlerDto);
+    }
 }

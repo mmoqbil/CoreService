@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CoreService_backend.Configurations.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CoreService_backend.Infrastructure;
 using CoreService_backend.Models.Result;
 using CoreService_backend.Models.Dtos;
-
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CoreService_backend.Controllers;
 
@@ -14,12 +19,14 @@ public class AuthenticationController : ControllerBase
 
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IAuthenticationManager _authenticationManager;
+    private readonly JwtConfig _jwtConfig;
         
 
-    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager)
+    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager, JwtConfig jwtConfig)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
+        _jwtConfig = jwtConfig;
     }
 
 
@@ -29,9 +36,9 @@ public class AuthenticationController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            var user_exist = await _userManager.FindByEmailAsync(requestDto.Email);
+            var userExist = await _userManager.FindByEmailAsync(requestDto.Email);
 
-            if (user_exist != null)
+            if (userExist != null)
             {
                 // user is allready exist with this email 
                 return BadRequest(new AuthResult(false, new List<string>()
@@ -126,5 +133,45 @@ public class AuthenticationController : ControllerBase
         }
 
         return Ok(new AuthResult(true, _authenticationManager.GenerateJwtToken(user, roles)));
+    }
+
+    [HttpPost]
+    [Route("refreshToken")]
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        try
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
+
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            var userId = jwtToken.Id;
+
+            var user = await _userManager.FindByIdAsync(userId);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            // TODO: Sprawdź czy token jest w liście unieważnionych tokenów, jeśli tak to zwróć Unauthorized
+
+            var newJwtToken = _authenticationManager.GenerateJwtToken(user, userRoles);
+
+            return Ok(new AuthResult(true, newJwtToken));
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized();
+        }
     }
 }

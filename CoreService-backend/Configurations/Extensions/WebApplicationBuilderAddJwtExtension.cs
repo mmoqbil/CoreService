@@ -13,4 +13,5 @@ public static class WebApplicationBuilderAddJwtExtension
 public class JwtConfig
 {
     public string Secret { get; set; }
+    public int AccessTokenExpirationMinutes { get; set; } = 120;
 }

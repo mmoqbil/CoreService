@@ -8,6 +8,8 @@ public static class WebApplicationBuilderAddAuthenticationExtension
 {
     public static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
     {
+        var jwtConfig = new JwtConfig();
+        
         builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -16,7 +18,7 @@ public static class WebApplicationBuilderAddAuthenticationExtension
             })
             .AddJwtBearer(jwt =>
             {
-                var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
+                var key = Encoding.ASCII.GetBytes(jwtConfig.AccessTokenExpirationMinutes.ToString());
 
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = new TokenValidationParameters()

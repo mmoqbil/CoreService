@@ -81,18 +81,6 @@ public class QueueManager : IQueueManager
                 
             return null;
         }
-        public void SendEmailWithError(HttpStatusCode statusCode, string serviceName)
-        {
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress("coreserviceinfo@gmail.com");
-            message.To.Add(new MailAddress("adres@uzytkownika.com"));
-            message.Subject = "Error with service" + serviceName;
-            message.Body = "There is in service: " + serviceName + " With this error: " + statusCode;
 
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-            client.EnableSsl = true;
-            client.Credentials = new NetworkCredential("coreserviceinfo@gmail.com", "Coreservice123");
-            client.Send(message);
-        }
     }
 }

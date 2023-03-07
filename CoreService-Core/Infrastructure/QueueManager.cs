@@ -1,4 +1,5 @@
 ﻿using CoreService_Core.Model.Dto;
+using CoreService_Core.Service;
 using CoreService_Core.Service.Interface;
 
 namespace CoreService_Core.Infrastructure;
@@ -6,10 +7,10 @@ namespace CoreService_Core.Infrastructure;
 public class QueueManager : IQueueManager
 {
     private readonly IResponseService _responseService;
-    private IResponseErrorEmail _errorEmail;
+    private ResponseErrorEmail _errorEmail;
     private const int SecondsPerAction = 60;
 
-    public QueueManager(IResponseService responseService, IResponseErrorEmail errorEmail)
+    public QueueManager(IResponseService responseService, ResponseErrorEmail errorEmail)
     {
         _responseService = responseService ?? throw new ArgumentNullException(nameof(responseService));
         _errorEmail = errorEmail ?? throw new ArgumentNullException(nameof(errorEmail));

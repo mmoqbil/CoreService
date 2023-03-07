@@ -19,14 +19,13 @@ public class AuthenticationController : ControllerBase
 
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IAuthenticationManager _authenticationManager;
-    private readonly JwtConfig _jwtConfig;
+
         
 
-    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager, JwtConfig jwtConfig)
+    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager, JwtConfig jwtConfig, TokenValidationParameters tokenValidationParameters)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
-        _jwtConfig = jwtConfig;
     }
 
 
@@ -132,7 +131,7 @@ public class AuthenticationController : ControllerBase
             return Forbid();
         }
 
-        return Ok(new AuthResult(true, _authenticationManager.GenerateJwtToken(user, roles)));
+        return Ok(new AuthResult(true, await _authenticationManager.GenerateJwtToken(user)));
     }
 
     [HttpPost]
@@ -140,38 +139,12 @@ public class AuthenticationController : ControllerBase
     [Authorize(Roles = "User")]
     public async Task<IActionResult> RefreshToken()
     {
-        try
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
+        var authResponse = _authenticationManager.RefreshTokenAsync(token);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
+        return Ok(new AuthResult(true, newJwtToken));
 
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
-
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            var userId = jwtToken.Id;
-
-            var user = await _userManager.FindByIdAsync(userId);
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            // TODO: Sprawdź czy token jest w liście unieważnionych tokenów, jeśli tak to zwróć Unauthorized
-
-            var newJwtToken = _authenticationManager.GenerateJwtToken(user, userRoles);
-
-            return Ok(new AuthResult(true, newJwtToken));
-        }
-        catch (Exception ex)
-        {
-            return Unauthorized();
-        }
+        return Unauthorized();
     }
 }

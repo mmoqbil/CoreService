@@ -12,7 +12,7 @@ public class CreateResponseResult : ResponseResult
     public ResponseHandler? Response { get; set; }
 }
 
-public class GetResponseResult
+public class GetResponseResult : ResponseResult
 {
     public ResponseHandler? Response { get; set; }
 }

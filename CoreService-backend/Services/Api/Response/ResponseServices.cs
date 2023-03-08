@@ -70,9 +70,9 @@ public class ResponseServices : IResponseService
         return false;
     }
 
-    public async Task CreateResponseHandler(ResponseHandlerDto responseHandlerDto)
+    public async Task CreateResponseHandler(ResponseHandlerDto request)
     {
-        await _repository.CreateResponseHandler(responseHandlerDto);
+        await _repository.CreateResponseHandler(request);
         await _repository.SaveChanges();
     }
 }

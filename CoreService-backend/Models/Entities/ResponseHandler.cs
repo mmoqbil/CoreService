@@ -25,5 +25,6 @@ public class ResponseHandler
     public int? Ping { get; set; }
 
     [Required]
+    // TODO: Change name to CreationDate
     public DateTime DateTime { get; set; }
 }

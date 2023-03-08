@@ -122,8 +122,21 @@ public class ResponseController : ControllerBase
 
 
     [HttpPost]
-    public async Task CreateResponseHandler([FromBody] ResponseHandlerDto responseHandlerDto)
+    public async Task CreateResponseHandler([FromBody] ResponseHandlerDto request)
     {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (!ModelState.IsValid || userId is null)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var resource = await _response.CreateResponseHandler(request)
+
+        if (resource is null)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
         // VALIDATION TOKEN
         await _response.CreateResponseHandler(responseHandlerDto);
     }

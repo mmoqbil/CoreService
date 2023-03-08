@@ -1,16 +1,16 @@
-﻿using CoreService_backend.Enitities;
-using CoreService_backend.Models.Dtos;
+﻿using CoreService_backend.Models.Dtos;
+using CoreService_backend.Models.Entities;
 
-namespace CoreService_backend.Services.Api.Resources
+namespace CoreService_backend.Services.Api.Resources;
+
+public interface IResourceRepository
 {
-    public interface IResourceRepository
-    {
-        Task<IEnumerable<Resource>?> GetResources();
-        void DeleteResource(Resource resource);
-        Resource CreateResource(ResourceDto resource, string? userId);
-        void UpdateResource(ResourceUpdateDto resource);
-        Task<Resource?> GetResourceById(string id);
-        Task<IEnumerable<ResourceDto>?> GetResourcesByUserID(string userId);
-        Task<bool> SaveChanges();
-    }
+    Task<IEnumerable<Resource>?> GetResources();
+    void DeleteResource(Resource resource);
+    Resource CreateResource(ResourceCreateDto resource, string userId);
+    void UpdateResource(ResourceUpdateDto resource);
+    Task<Resource?> GetResourceById(string id);
+    Task<IEnumerable<ResourceDto>?> GetResourcesByUserId(string userId);
+    Task<bool> SaveChanges();
+    Task<bool> CheckResourceExist(string resourceId);
 }

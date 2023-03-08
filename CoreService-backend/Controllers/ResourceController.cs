@@ -1,123 +1,149 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using CoreService_backend.Dtos;
-using CoreService_backend.Enitities;
+﻿using System.Security.Claims;
 using CoreService_backend.Models.Dtos;
+using CoreService_backend.Models.Entities;
 using CoreService_backend.Services.Api.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Newtonsoft.Json;
-using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace CoreService_backend.Controllers
+
+namespace CoreService_backend.Controllers;
+
+[Route("api/[controller]")] // ~/api/Rosource
+[ApiController]
+public class ResourceController : ControllerBase
 {
-    [Route("api/[controller]")] // ~/api/Rosource
-    [ApiController]
-    public class ResourceController : ControllerBase
+    private readonly IResourceService _resources;
+
+    public ResourceController(IResourceService resource)
     {
-        private readonly IResourceService _resources;
+        _resources = resource ?? throw new ArgumentNullException(nameof(resource));
+    }
 
-        public ResourceController(IResourceService resource)
+    [HttpGet("admin")]
+    [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetResources()
+    {
+        return Ok(await _resources.GetResources());
+    }
+
+
+    [HttpGet]
+    [Authorize(Roles = "User")]
+    public async Task<ActionResult<IEnumerable<ResourceDto>?>> GetUserResources()
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId != null)
         {
-            _resources = resource;
-        }
-
-        [HttpGet("all")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<Resource>?> GetResources()
-        {
-            return await _resources.GetResources();
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "User")]
-        public async Task<ActionResult<IEnumerable<ResourceDto>?>> GetUserResources()
-        {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == null)
-            {
-                return Ok(Enumerable.Empty<ResourceDto>());
-            }
             //TODO: returned resource should have resourceId
             return Ok(await _resources.GetResourcesByUserId(userId));
         }
 
-        [HttpGet]
-        [Authorize(Roles = "User")]
-        [Route("{userId}/{resourceId}")]
-        public async Task<Resource?> GetResource(string resourceId)
+        return Ok(Enumerable.Empty<ResourceDto>());
+    }
+
+
+    [HttpGet]
+    [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [Route("{userId}/{resourceId}")]
+    public async Task<IActionResult> GetResource(string resourceId)
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId != resourceId)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == resourceId)
-            {
-                //TODO: returned resource should have resourceId
-                return await _resources.GetResourceById(resourceId);
-            }
-
-            return null;
+            return Unauthorized();
         }
 
+        //TODO: returned resource should have resourceId
+        return Ok(await _resources.GetResourceById(resourceId));
+    }
 
-        [HttpPut]
-        [Authorize(Roles = "User")]
-        [Route("{resourceId}")]
-        public async Task UpdateResource([FromBody] ResourceUpdateDto updatedResource)
+
+    [HttpPut]
+    [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [Route("{resourceId}")]
+    public async Task<IActionResult> UpdateResource([FromBody] ResourceUpdateDto updatedResource)
+    {
+        if (!ModelState.IsValid)
         {
-            //TODO: This endpoint should be validated!
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == updatedResource.UserId)
-            {
-                await _resources.UpdateResource(updatedResource);
-            }
+            // bad request because input is invalid 
+            return BadRequest(ModelState);
         }
 
-        [HttpDelete]
-        [Authorize(Roles = "User")]
-        [Route("{resourceId}")]
-        public async Task<IActionResult> DeleteResource(string resourceId)
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId != updatedResource.UserId)
         {
-            var resource = await _resources.GetResourceById(resourceId);
-
-            if (resource is null)
-            {
-                return NotFound();
-            }
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (resource.UserId != userId)
-            {
-                return Unauthorized();
-            }
-
-            await _resources.RemoveResource(resource.Id);
-            return NoContent();
+            return Unauthorized();
         }
 
+        await _resources.UpdateResource(updatedResource);
+        return NoContent();
+    }
 
-        [HttpPost]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> CreateResource([FromBody] ResourceDto resourceDto)
+    [HttpDelete]
+    [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [Route("{resourceId}")]
+    public async Task<IActionResult> DeleteResource(string resourceId)
+    {
+        var resource = await _resources.GetResourceById(resourceId);
+
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            var resource = await _resources.CreateResource(resourceDto, userId);
-
-            if (resource == null)
-            {
-                return BadRequest("Error - Resource not created.");
-            }
-            //TODO: FIX returned resource should be ResourceDto not Resource!
-            return Ok(resource); // TODO: Rebuild to CreatedAtRoute
+            // bad request because input is invalid 
+            return BadRequest(ModelState);
         }
+
+        if (resource is null)
+        {
+            return NotFound();
+        }
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (resource.UserId != userId)
+        {
+            return Unauthorized();
+        }
+
+        await _resources.RemoveResource(resource.Id);
+        return NoContent();
+    }
+
+
+    [HttpPost]
+    [Authorize(Roles = "User")]
+    [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CreateResource([FromBody] ResourceCreateDto resourceDto)
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (!ModelState.IsValid || userId is null)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var resource = await _resources.CreateResource(resourceDto, userId);
+
+        if (resource is null)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
+
+        //TODO: Returned resource should be ResourceDto not Resource!
+        return Ok(resource); // TODO: Rebuild to CreatedAtRoute
     }
 }

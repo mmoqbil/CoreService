@@ -1,25 +1,24 @@
-﻿using CoreService_backend.Data.ApiDbContext;
+﻿using CoreService_backend.DataAccess;
 using Microsoft.AspNetCore.Identity;
 
-namespace CoreService_backend.Configurations.Extensions
+namespace CoreService_backend.Configurations.Extensions;
+
+public static class WebApplicationBuilderConfigureIdentity
 {
-    public static class WebApplicationBuilderConfigureIdentity
+    public static WebApplicationBuilder ConfigureIdentity(this WebApplicationBuilder builder)
     {
-        public static WebApplicationBuilder ConfigureIdentity(this WebApplicationBuilder builder)
+        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>();
+
+        builder.Services.Configure<IdentityOptions>(options =>
         {
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
+            options.Password.RequireDigit = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequiredLength = 6;
+        });
 
-            builder.Services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-            });
-
-            return builder;
-        }
+        return builder;
     }
 }

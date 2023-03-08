@@ -1,43 +1,78 @@
-﻿using CoreService_backend.Enitities;
-using CoreService_backend.Models.Enitities;
+﻿using System.Collections;
+using CoreService_backend.Models.Dtos;
+using CoreService_backend.Models.Entities;
+using System.Collections.Generic;
+using Azure;
 
-namespace CoreService_backend.Services.Api.Response
+namespace CoreService_backend.Services.Api.Response;
+
+public class ResponseServices : IResponseService
 {
-    public class ResponseServices : IResponseService
+    private readonly IResponseRepository _repository;
+
+    public ResponseServices(IResponseRepository repository)
     {
-        private readonly IResponseRepository _repository;
+        _repository = repository;
+    }
 
-        public ResponseServices(IResponseRepository repository)
-        {
-            _repository = repository;
-        }
+    public async Task<IEnumerable<ResponseHandler>?> GetResponses()
+    {
+        return await _repository.GetResponses();
+    }
 
-        public async Task<IEnumerable<ResponseHandler>?> GetResponses()
-        {
-            return await _repository.GetResponses();
-        }
+    public async Task<ResponseHandler?> GetResponseById(int responseId)
+    {
+        return await _repository.GetResponseById(responseId);
+    }
 
-        public async Task<ResponseHandler?> GetResponseById(int responseId)
-        {
-            return await _repository.GetResponseById(responseId);
-        }
+    public async Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string resourceId)
+    {
+        return await _repository.GetResourcesByResourceId(resourceId);
+    }
 
-        public async Task<IEnumerable<ResponseHandler>?> GetResponsesByResourceId(string userId)
-        {
-            return await _repository.GetResourcesByResourceId(userId);
-        }
+    public async Task<List<ResponseHandler>> GetResponseByUserId(IEnumerable<ResourceDto> resources)
+    {
+        //var responseHandlersTask = await Task.WhenAll(resources
+        //    .Select(async resource =>
+        //    {
+        //        var responses = await GetResponseByResourceId(resource.Id);
+        //        return responses ?? Enumerable.Empty<ResponseHandler>();
+        //    }));
 
-        public async Task<bool> RemoveResponse(int responseId)
+        //return responseHandlersTask.SelectMany(x => x).ToList();
+
+        var responseHandlersTask = new List<ResponseHandler>();
+
+        foreach (var resource in resources)
         {
-            var response = await _repository.GetResponseById(responseId);
-            if (response != null)
+            var responses = await GetResponseByResourceId(resource.Id);
+
+            if (responses != null)
             {
-                _repository.DeleteResponse(response);
-                await _repository.SaveChanges();
-                return true;
+                responseHandlersTask.AddRange(responses);
             }
-
-            return false;
         }
+
+        // TODO: Is it well done?
+        return responseHandlersTask;
+    }
+
+    public async Task<bool> RemoveResponse(int responseId)
+    {
+        var response = await _repository.GetResponseById(responseId);
+        if (response != null)
+        {
+            _repository.DeleteResponse(response);
+            await _repository.SaveChanges();
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task CreateResponseHandler(ResponseHandlerDto request)
+    {
+        await _repository.CreateResponseHandler(request);
+        await _repository.SaveChanges();
     }
 }

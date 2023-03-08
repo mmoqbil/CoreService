@@ -1,4 +1,5 @@
 ﻿using CoreService_Core.Model.Dto;
+using CoreService_Core.Service;
 using CoreService_Core.Service.Interface;
 
 namespace CoreService_Core.Infrastructure;
@@ -6,11 +7,13 @@ namespace CoreService_Core.Infrastructure;
 public class QueueManager : IQueueManager
 {
     private readonly IResponseService _responseService;
+    private ResponseErrorEmail _errorEmail;
     private const int SecondsPerAction = 60;
 
     public QueueManager(IResponseService responseService)
     {
         _responseService = responseService ?? throw new ArgumentNullException(nameof(responseService));
+        _errorEmail = new ResponseErrorEmail();
     }
 
     public async Task<List<ResourceDto>> CheckAllAvailableResources(IEnumerable<ResourceDto>? resourceList, HttpClient client, ILogger<Worker> logger)
@@ -43,11 +46,12 @@ public class QueueManager : IQueueManager
                 else
                 {
                     logger.LogError("[{status}]The website is down. status code {statusCode}", "SUCCESS", result.StatusCode);
+                    _errorEmail.SendEmailWithError(result.StatusCode, resource.Name);
                 }
             }
 
             logger.LogInformation("[{status}] Resource {name} was skipped, left time to refresh: {timeLeft}", "SKIP", resource.Name, resource.TimeLeft);
-                
+
             resource.TimeLeft -= TimeSpan.FromSeconds(SecondsPerAction);
             availableResources.Add(resource);
 
@@ -78,8 +82,9 @@ public class QueueManager : IQueueManager
         catch (HttpRequestException exception)
         {
             logger.LogError("[{status}]An HttpRequestException has occurred while retrieving the resource from the URL {Url}: {Message}.", "FAIL", resource.UrlAdress, exception.Message);
-                
+
             return null;
         }
+
     }
 }

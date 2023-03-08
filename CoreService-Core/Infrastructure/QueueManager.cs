@@ -72,7 +72,7 @@ public class QueueManager : IQueueManager
         catch (UriFormatException exception)
         {
             logger.LogError(
-                "[{status}]An UriFormatException has occurred: the UrlAdress parameter value is an invalid URL. Please check if the parameter value is correctly formatted.",
+                "[{status}] An UriFormatException has occurred: the UrlAdress parameter value is an invalid URL. Please check if the parameter value is correctly formatted.",
                 "FAIL");
 
             await _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
@@ -81,9 +81,17 @@ public class QueueManager : IQueueManager
 
         catch (HttpRequestException exception)
         {
-            logger.LogError("[{status}]An HttpRequestException has occurred while retrieving the resource from the URL {Url}: {Message}.", "FAIL", resource.UrlAdress, exception.Message);
+            logger.LogError("[{status}] An HttpRequestException has occurred while retrieving the resource from the URL {Url}: {Message}.", "FAIL", resource.UrlAdress, exception.Message);
 
+            await _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
             return null;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError("[{status}] Unexpected error, error message: {Message}", "FAIL", exception.Message);
+
+            await _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
+            return null
         }
 
     }

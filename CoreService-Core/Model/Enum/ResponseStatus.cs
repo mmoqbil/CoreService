@@ -2,6 +2,7 @@
 
 public enum ResponseStatus
 {
-    Successful = 1,
     Fail = 0,
+    Successful = 1,
+    Unsolved = 2,
 }

@@ -91,7 +91,7 @@ public class QueueManager : IQueueManager
             logger.LogError("[{status}] Unexpected error, error message: {Message}", "FAIL", exception.Message);
 
             await _responseService.CreateResponseHandlerWithErrorMessage(resource, exception.Message);
-            return null
+            return null;
         }
 
     }

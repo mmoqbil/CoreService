@@ -122,7 +122,7 @@ public class ResponseController : ControllerBase
 
 
     [HttpPost]
-    public async Task CreateResponseHandler([FromBody] ResponseHandlerDto request)
+    public async Task<IActionResult> CreateResponseHandler([FromBody] ResponseHandlerDto request)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -131,7 +131,7 @@ public class ResponseController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var resource = await _response.CreateResponseHandler(request)
+        var resource = await _response.CreateResponseHandler(request);
 
         if (resource is null)
         {

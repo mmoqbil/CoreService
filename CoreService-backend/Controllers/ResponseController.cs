@@ -122,6 +122,7 @@ public class ResponseController : ControllerBase
 
 
     [HttpPost]
+    [ProducesResponseType(typeof(ResponseHandler), StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateResponseHandler([FromBody] ResponseHandlerDto request)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -131,13 +132,59 @@ public class ResponseController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var resource = await _response.CreateResponseHandler(request);
+        var result = await _response.CreateResponseHandler(request);
 
-        if (resource is null)
+        if (!result.Success)
         {
             return Problem(statusCode: 500, detail: "Something gone wrong");
         }
-        // VALIDATION TOKEN
-        await _response.CreateResponseHandler(responseHandlerDto);
+
+        return Ok(result.Response);
+
+        //return !result.Success ? Problem(statusCode: 500, detail: "Something gone wrong") : Ok(result.Response);
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [Route("{responseId:int}")]
+    public async Task<IActionResult> RemoveResponseHandler(int responseId)
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+        {
+            return BadRequest();
+        }
+
+        var response = await _response.RemoveResponse(responseId, userId);
+
+        if (!response.Success)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
+
+        return Ok($"Resource deleted: {response.Success}");
+    }
+
+    [HttpPut]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [Route("{responseId}")]
+    public async Task<IActionResult> UpdateResponseHandler([FromBody] ResponseHandlerDto request, int responseId)
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+        {
+            return BadRequest();
+        }
+
+        var response = await _response.UpdateResponse(request);
+
+        if (!response.Success)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
+
+        return Ok($"Resource deleted: {response.Success}");
     }
 }

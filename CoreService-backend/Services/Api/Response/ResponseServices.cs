@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using CoreService_backend.Models.Dtos;
+﻿using CoreService_backend.Models.Dtos;
 using CoreService_backend.Models.Entities;
-using System.Collections.Generic;
-using Azure;
+using CoreService_backend.Models.Result;
 
 namespace CoreService_backend.Services.Api.Response;
 
@@ -15,14 +13,47 @@ public class ResponseServices : IResponseService
         _repository = repository;
     }
 
-    public async Task<IEnumerable<ResponseHandler>?> GetResponses()
+
+    public async Task<GetResponsesResult> GetResponses()
     {
-        return await _repository.GetResponses();
+        try
+        {
+            var responses = await _repository.GetResponses();
+
+            return new GetResponsesResult
+            {
+                Success = true,
+                Responses = responses
+            };
+        }
+        catch
+        {
+            return new GetResponsesResult
+            {
+                Success = false
+            };
+        }
     }
 
-    public async Task<ResponseHandler?> GetResponseById(int responseId)
+    public async Task<GetResponseResult> GetResponseById(int responseId)
     {
-        return await _repository.GetResponseById(responseId);
+        try
+        {
+            var response = await _repository.GetResponseById(responseId);
+
+            return new GetResponseResult
+            {
+                Success = true,
+                Response = response
+            };
+        }
+        catch
+        {
+            return new GetResponseResult
+            {
+                Success = false
+            };
+        }
     }
 
     public async Task<IEnumerable<ResponseHandler>?> GetResponseByResourceId(string resourceId)
@@ -57,22 +88,76 @@ public class ResponseServices : IResponseService
         return responseHandlersTask;
     }
 
-    public async Task<bool> RemoveResponse(int responseId)
+    public async Task<RemoveResponseResult> RemoveResponse(int responseId, string userId)
     {
         var response = await _repository.GetResponseById(responseId);
         if (response != null)
         {
-            _repository.DeleteResponse(response);
-            await _repository.SaveChanges();
-            return true;
+            try
+            {
+                _repository.DeleteResponse(response);
+                await _repository.SaveChanges();
+                return new RemoveResponseResult
+                {
+                    Success = true
+                };
+            }
+            catch
+            {
+                return new RemoveResponseResult
+                {
+                    Success = false
+                };
+            }
         }
 
-        return false;
+        return new RemoveResponseResult
+        {
+            Success = false
+        };
     }
 
-    public async Task CreateResponseHandler(ResponseHandlerDto request)
+    public async Task<CreateResponseResult> CreateResponseHandler(ResponseHandlerDto request)
     {
-        await _repository.CreateResponseHandler(request);
-        await _repository.SaveChanges();
+        try
+        {
+            var response = await _repository.CreateResponseHandler(request);
+            await _repository.SaveChanges();
+
+            return new CreateResponseResult
+            {
+                Success = true,
+                Response = response
+            };
+        }
+        catch
+        {
+            return new CreateResponseResult
+            {
+                Success = false,
+            };
+        }
+    }
+
+    public async Task<UpdateResponseResult> UpdateResponse(ResponseHandlerDto request)
+    {
+        try
+        {
+            var resourceUpdated = _repository.UpdateResponse(request);
+            await _repository.SaveChanges();
+
+            return new UpdateResponseResult
+            {
+                Success = true,
+                Response = resourceUpdated
+            };
+        }
+        catch
+        {
+            return new UpdateResponseResult
+            {
+                Success = false
+            };
+        }
     }
 }

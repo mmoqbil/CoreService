@@ -28,9 +28,12 @@ public class ResponseRepository : IResponseRepository
         _context.Response.Remove(response);
     }
 
-    public void UpdateResponse(ResponseHandler response)
+    public ResponseHandler UpdateResponse(ResponseHandlerDto request)
     {
+        var response = _mapper.Map<ResponseHandler>(request);
         _context.Response.Update(response);
+
+        return response;
     }
 
     public async Task<ResponseHandler?> GetResponseById(int id)
@@ -48,9 +51,18 @@ public class ResponseRepository : IResponseRepository
         return await _context.SaveChangesAsync() > 0;
     }
 
-    public async Task CreateResponseHandler(ResponseHandlerDto responseHandlerDto)
+    public async Task<ResponseHandler?> CreateResponseHandler(ResponseHandlerDto responseHandlerDto)
     {
-        var responseHandler = _mapper.Map<ResponseHandler>(responseHandlerDto);
-        await _context.AddAsync(responseHandler);
+        try
+        {
+            var responseHandler = _mapper.Map<ResponseHandler>(responseHandlerDto);
+            await _context.AddAsync(responseHandler);
+
+            return responseHandler;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

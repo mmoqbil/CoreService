@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using CoreService_backend.Services.Api.Identity;
 using CoreService_backend.Models.Request;
 using CoreService_backend.Models.Response;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CoreService_backend.Controllers;
 
@@ -38,7 +39,7 @@ public class IdentityController : ControllerBase
             if (userExist != null)
             {
                 // user is allready exist with this email 
-                return BadRequest(new AuthResult(false, new List<string>()
+                return BadRequest(new AuthResult(false, new[]
                 {
                     "Email already exist"
                 }));
@@ -74,7 +75,7 @@ public class IdentityController : ControllerBase
             // bad request from create new user on database
             var errors = isCreated.Errors.ToList(); // How to get into is_created {Failed: ...} ? 
 
-            return BadRequest(new AuthResult(false, new List<string>()
+            return BadRequest(new AuthResult(false, new[]
             {
                 "Server error",
                 $"Error: {errors}"

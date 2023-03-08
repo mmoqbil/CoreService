@@ -7,9 +7,9 @@ public interface IResponseRepository
 {
     Task<IEnumerable<ResponseHandler>?> GetResponses();
     void DeleteResponse(ResponseHandler response);
-    void UpdateResponse(ResponseHandler response);
+    ResponseHandler? UpdateResponse(ResponseHandlerDto response);
     Task<ResponseHandler?> GetResponseById(int id);
     Task<IEnumerable<ResponseHandler>?> GetResourcesByResourceId(string resourceId);
     Task<bool> SaveChanges();
-    Task CreateResponseHandler(ResponseHandlerDto responseHandlerDto);
+    Task<ResponseHandler?> CreateResponseHandler(ResponseHandlerDto responseHandlerDto);
 }

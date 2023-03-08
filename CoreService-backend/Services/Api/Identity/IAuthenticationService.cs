@@ -9,7 +9,9 @@ namespace CoreService_backend.Services.Api.Identity;
 public interface IAuthenticationService
 {
     Task<bool> ValidateApiUser(UserLoginRequestDto user);
-    Task<(string, SecurityToken)> GenerateJwtToken(IdentityUser user);
-    AuthResult RefreshTokenAsync(string token);
+    Task<(string, SecurityToken)> GenerateJwtTokenAsync(IdentityUser user);
+    Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken);
     public Task<AuthenticationResult> GenerateAuthenticationResultForUser(IdentityUser user);
+    string GenerateJwtToken(IdentityUser user, IList<string> roles);
+    Task<AuthenticationResult> LoginAsync(string email, string password);
 }

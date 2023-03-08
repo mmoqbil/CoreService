@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CoreService_backend.Configurations.Extensions;
@@ -10,7 +11,7 @@ public static class WebApplicationBuilderAddAuthenticationExtension
     public static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
     {
         var jwtConfig = new JwtConfig();
-        var key = Encoding.ASCII.GetBytes(jwtConfig.AccessTokenExpirationMinutes.ToString());
+        var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
         var tokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuerSigningKey = true,

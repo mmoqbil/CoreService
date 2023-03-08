@@ -3,26 +3,24 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CoreService_backend.Models.Result;
 using CoreService_backend.Models.Dtos;
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using CoreService_backend.Services.Api.Identity;
+using CoreService_backend.Models.Request;
+using CoreService_backend.Models.Response;
 
 namespace CoreService_backend.Controllers;
 
 [Route("api/[controller]")] // ~/api/Authentication
 [ApiController]
-public class AuthenticationController : ControllerBase
+public class IdentityController : ControllerBase
 {
 
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IAuthenticationService _authenticationManager;
+    
 
-        
-
-    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationService authenticationManager, JwtConfig jwtConfig, TokenValidationParameters tokenValidationParameters)
+    public IdentityController(UserManager<IdentityUser> userManager, IAuthenticationService authenticationManager)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
@@ -63,8 +61,14 @@ public class AuthenticationController : ControllerBase
                 // Generate new token
                 var token = _authenticationManager.GenerateJwtToken(newUser, roles);
 
+
                 // result 200 
-                return Ok(new AuthResult(true, token));
+                return Ok(new AuthenticationResult()
+                {
+                    Success = true,
+                    Token = token,
+
+                });
             }
 
             // bad request from create new user on database
@@ -106,13 +110,43 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpOptions]
+    [Route("Loginv2")]
+    public async Task<IActionResult> LoginApiUserV2([FromBody] UserLoginRequestDto requestDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            // bad request because input is invalid 
+            return BadRequest(ModelState);
+        }
+
+        var authResponse = await _authenticationManager.LoginAsync(requestDto.Email, requestDto.Password);
+
+        if (!authResponse.Success)
+        {
+            return BadRequest(new AuthFailedResponse()
+            {
+                Error = authResponse.Errors,
+            });
+        }
+
+        return Ok(new AuthSuccessResponse()
+        {
+            Token = authResponse.Token,
+            RefreshToken = authResponse.RefreshToken,
+        });
+    }
+
+    [HttpOptions]
     [Route("DevLogin")]
     public async Task<IActionResult> DevLoginApiUser([FromBody] UserLoginRequestDto userDto)
     {
         if (!ModelState.IsValid)
         {
             // bad request because input is invalid 
-            return BadRequest(ModelState);
+            return BadRequest(new AuthFailedResponse()
+            {
+                Error = new [] {ModelState.Values.SelectMany(x => x.Errors.Select(s => s.ErrorMessage)).ToString()}
+            });
         }
 
         var user = await _userManager.FindByEmailAsync(userDto.Email);
@@ -131,6 +165,7 @@ public class AuthenticationController : ControllerBase
             return Forbid();
         }
 
+        // A new authorization type has been implemented
         var authenticationResult = await _authenticationManager.GenerateAuthenticationResultForUser(user);
 
         return Ok(authenticationResult);
@@ -138,15 +173,23 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost]
     [Route("refreshToken")]
-    [Authorize(Roles = "User")]
-    public async Task<IActionResult> RefreshToken()
+    //[Authorize(Roles = "User")]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-        //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
-        var authResponse = _authenticationManager.RefreshTokenAsync(token);
+        var authResponse = await _authenticationManager.RefreshTokenAsync(request.Token, request.RefreshToken);
 
-        return Ok(new AuthResult(true, newJwtToken));
+        if (!authResponse.Success)
+        {
+            return BadRequest(new AuthFailedResponse()
+            {
+                Error = authResponse.Errors,
+            });
+        }
 
-        return Unauthorized();
+        return Ok(new AuthSuccessResponse()
+        {
+            Token = authResponse.Token,
+            RefreshToken = authResponse.RefreshToken,
+        });
     }
 }

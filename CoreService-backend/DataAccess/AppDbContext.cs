@@ -9,6 +9,7 @@ public class AppDbContext : IdentityDbContext
 {
     public DbSet<Resource> Resources { get; set; }
     public DbSet<ResponseHandler> Response { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     private readonly string _connectionString = "Server = (localdb)\\mssqllocaldb;Database=CoreService;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
     // TODO: remove this CS

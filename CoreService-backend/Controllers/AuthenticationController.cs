@@ -1,7 +1,6 @@
 ﻿using CoreService_backend.Configurations.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using CoreService_backend.Infrastructure;
 using CoreService_backend.Models.Result;
 using CoreService_backend.Models.Dtos;
 using System.Data;
@@ -9,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using CoreService_backend.Services.Api.Identity;
 
 namespace CoreService_backend.Controllers;
 
@@ -18,11 +18,11 @@ public class AuthenticationController : ControllerBase
 {
 
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IAuthenticationManager _authenticationManager;
+    private readonly IAuthenticationService _authenticationManager;
 
         
 
-    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationManager authenticationManager, JwtConfig jwtConfig, TokenValidationParameters tokenValidationParameters)
+    public AuthenticationController(UserManager<IdentityUser> userManager, IAuthenticationService authenticationManager, JwtConfig jwtConfig, TokenValidationParameters tokenValidationParameters)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
@@ -131,7 +131,9 @@ public class AuthenticationController : ControllerBase
             return Forbid();
         }
 
-        return Ok(new AuthResult(true, await _authenticationManager.GenerateJwtToken(user)));
+        var authenticationResult = await _authenticationManager.GenerateAuthenticationResultForUser(user);
+
+        return Ok(authenticationResult);
     }
 
     [HttpPost]

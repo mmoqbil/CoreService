@@ -1,5 +1,5 @@
 ﻿using CoreService_backend.DataAccess;
-using CoreService_backend.Infrastructure;
+using CoreService_backend.Services.Api.Identity;
 using CoreService_backend.Services.Api.Resources;
 using CoreService_backend.Services.Api.Response;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,7 @@ public static class WebApplicationBuilderAddPersistenceExtension
 
         builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
         builder.Services.AddScoped<IResourceService, ResourceService>();
-        builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+        builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
         builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
         builder.Services.AddScoped<IResponseService, ResponseServices>();
         

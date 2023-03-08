@@ -17,7 +17,7 @@ namespace CoreService_Core.Service
             message.From = new MailAddress("coreserviceinfo@gmail.com");
             message.To.Add(new MailAddress("mateuszmoqbil@gmail.com"));
             message.Subject = "Error with service " + serviceName;
-            message.Body = "There is in service: " + serviceName + " With this error: " + statusCode;
+            message.Body = "There is Error in service: " + serviceName + " With this error: " + statusCode;
 
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;

@@ -6,17 +6,18 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using CoreService_backend.Configurations.Extensions;
 using CoreService_backend.Models.Dtos;
+using CoreService_backend.Models.Entities;
 using CoreService_backend.Models.Result;
 
-namespace CoreService_backend.Infrastructure;
+namespace CoreService_backend.Services.Api.Identity;
 
-public class AuthenticationManager : IAuthenticationManager
+public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IOptions<JwtConfig> _jwtConfig;
     private readonly TokenValidationParameters _tokenValidationParameters;
 
-    public AuthenticationManager(UserManager<IdentityUser> userManager, IOptions<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters)
+    public AuthenticationService(UserManager<IdentityUser> userManager, IOptions<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _jwtConfig = jwtConfig ?? throw new ArgumentNullException(nameof(jwtConfig));
@@ -27,10 +28,10 @@ public class AuthenticationManager : IAuthenticationManager
     {
         var user = await _userManager.FindByEmailAsync(userDto.Email);
 
-        return (user != null && await _userManager.CheckPasswordAsync(user, userDto.Password));
+        return user != null && await _userManager.CheckPasswordAsync(user, userDto.Password);
     }
 
-    public async Task<string> GenerateJwtToken(IdentityUser user)
+    public async Task<(string, SecurityToken)> GenerateJwtToken(IdentityUser user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var roles = await _userManager.GetRolesAsync(user);
@@ -41,7 +42,7 @@ public class AuthenticationManager : IAuthenticationManager
 
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-        claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.UserName));
+        claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
         claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
 
         foreach (var role in roles)
@@ -61,7 +62,7 @@ public class AuthenticationManager : IAuthenticationManager
         var token = jwtTokenHandler.CreateToken(tokenDescriptor);
         var jwtToken = jwtTokenHandler.WriteToken(token);
 
-        return jwtToken;
+        return (jwtToken, token);
     }
 
     public async AuthResult RefreshTokenAsync(string token)
@@ -78,18 +79,30 @@ public class AuthenticationManager : IAuthenticationManager
         //// TODO: Sprawdź czy token jest w liście unieważnionych tokenów, jeśli tak to zwróć Unauthorized
 
         //var newJwtToken = GenerateJwtToken(user, userRoles);
+
+
     }
 
-    public async AuthenticationResult GenerateAuthenticationResultForUser(IdentityUser user)
+    public async Task<AuthenticationResult> GenerateAuthenticationResultForUser(IdentityUser user)
     {
-        var jwtToken = await GenerateJwtToken(user);
+        var tokenContainer = await GenerateJwtToken(user);
+        var securityToken = tokenContainer.Item2;
+        var jwtToken = tokenContainer.Item1;
+
 
         var refreshToken = new RefreshToken
+        {
+            JwtId = securityToken.Id,
+            UserId = user.Id,
+            CreationDate = DateTime.UtcNow,
+            ExpiryDate = DateTime.UtcNow.AddMonths(6)
+        };
 
         return new AuthenticationResult()
         {
             Success = true,
             Token = jwtToken,
+            RefreshToken = refreshToken
         };
     }
 
@@ -115,7 +128,7 @@ public class AuthenticationManager : IAuthenticationManager
 
     private bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
     {
-        return (validatedToken is JwtSecurityToken jwtSecurityToken) &&
+        return validatedToken is JwtSecurityToken jwtSecurityToken &&
                jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                    StringComparison.InvariantCultureIgnoreCase);
     }

@@ -10,14 +10,14 @@ public static class WebApplicationBuilderAddSwaggerExtension
         {
             c.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "My API",
+                Title = "Core Service",
                 Version = "3.0.0"
             });
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,
-                Description = "Enter your bearer token in the format Bearer <token>",
+                Description = "JWT Authorization header using the Bearer scheme.",
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
                 BearerFormat = "JWT",

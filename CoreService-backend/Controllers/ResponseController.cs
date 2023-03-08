@@ -43,6 +43,7 @@ public class ResponseController : ControllerBase
         return Ok(await _response.GetResponseByResourceId(resourceId));
     }
 
+
     [HttpGet]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ResponseHandler), StatusCodes.Status200OK)]
@@ -167,7 +168,7 @@ public class ResponseController : ControllerBase
     }
 
     [HttpPut]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseHandler), StatusCodes.Status200OK)]
     [Route("{responseId}")]
     public async Task<IActionResult> UpdateResponseHandler([FromBody] ResponseHandlerDto request, int responseId)
     {
@@ -185,6 +186,6 @@ public class ResponseController : ControllerBase
             return Problem(statusCode: 500, detail: "Something gone wrong");
         }
 
-        return Ok($"Resource deleted: {response.Success}");
+        return Ok(response.Response);
     }
 }

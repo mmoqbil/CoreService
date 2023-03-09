@@ -2,9 +2,12 @@ using CoreService_backend.Configurations.Extensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
+
+
+//dlaczego nie dzia³a poprawnie kolejnoœæ pobierania configuracji? Nie pobiera danych z pliku secrets.json.
 builder.UserSecretsConfiguration();
+
 builder.AddMapper();
 builder.AddAuthentication();
 
@@ -14,18 +17,11 @@ builder.ConfigureIdentity();
 builder.AddControllers();
 builder.AddSwagger();
 builder.AddPersistence();
-
+builder.AddSerilog();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
 
-
-var logger = new LoggerConfiguration()
-  .ReadFrom.Configuration(builder.Configuration)
-  .Enrich.FromLogContext()
-  .CreateLogger();
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

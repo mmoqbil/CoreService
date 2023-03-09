@@ -4,6 +4,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.UserSecretsConfiguration();
 builder.AddMapper();
 builder.AddAuthentication();
 

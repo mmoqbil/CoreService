@@ -3,12 +3,24 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.UserSecretsConfiguration();
+
+// W jaki sposób zmieniæ kolejnoœæ pobierania danych z ustawieñ? 
+// Czy  builder.Configuration.AddUserSecrets<Program>(); jest potrzebny? 
+
+//var secretsPath = Path.Combine(builder.Environment.ContentRootPath, ".config", "secrets.json");
+//builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+//{
+//    config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+//    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+//    config.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+//    config.AddEnvironmentVariables();
+//});
+
+builder.ConfigureJwt();
 builder.AddMapper();
 builder.AddAuthentication();
 
-builder.ConfigureJwt();
+
 builder.ConfigureIdentity();
 
 builder.AddControllers();

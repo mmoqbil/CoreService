@@ -6,15 +6,17 @@ namespace CoreService_backend.Configurations.Extensions;
 
 public static class WebApplicationBuilderAddAuthenticationExtension
 {
+    private static IConfiguration _configuration;
+
+    public static void Configure(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     public static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
     {
-        //Dlaczego pomimo konfiguracji JwtConfigt w builderze property Secret jest nadal null'em? 
         var jwtConfig = new JwtConfig();
-
-
-        var secretKey = builder.Configuration.GetSection("JwtConfig:Secret").Value;
-        var key = Encoding.ASCII.GetBytes(secretKey);
+        var key = _configuration[SecretKey];
         var tokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuerSigningKey = true,

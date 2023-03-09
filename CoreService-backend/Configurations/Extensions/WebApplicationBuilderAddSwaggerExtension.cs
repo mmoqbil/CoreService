@@ -14,17 +14,17 @@ public static class WebApplicationBuilderAddSwaggerExtension
                 Version = "3.0.0"
             });
 
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
+                In = ParameterLocation.Header,
+                Description = "JWT Authorization header using the Bearer scheme.",
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
                 BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = @"JWT Authorization header using the Bearer scheme. Format: <b>Bearer &lt;token&gt;</b>"
+                Scheme = "bearer"
             });
 
-        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme

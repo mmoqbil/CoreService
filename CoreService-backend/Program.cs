@@ -30,6 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// W jaki sposób zapisaæ konfiguracje corsa w appsettings? 
 app.UseCors(p => p.WithOrigins("http://localhost:5173")
     .AllowAnyHeader()
     .AllowAnyMethod());

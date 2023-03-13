@@ -85,7 +85,7 @@ public class ResponseController : ControllerBase
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var resource = await _resource.GetResourceById(resourceId);
 
-        if (userId == null || resource == null)
+        if (userId == null && resource == null)
         {
             return Ok(Enumerable.Empty<ResourceDto>());
         }
@@ -106,7 +106,7 @@ public class ResponseController : ControllerBase
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var resourceExists = await _resource.CheckResourceExists(resourceId);
 
-        if (userId == null || resourceExists)
+        if (userId == null && resourceExists)
         {
             return BadRequest();
         }
@@ -128,7 +128,7 @@ public class ResponseController : ControllerBase
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (!ModelState.IsValid || userId is null)
+        if (!ModelState.IsValid && userId is null)
         {
             return BadRequest(ModelState);
         }
@@ -147,7 +147,7 @@ public class ResponseController : ControllerBase
 
     [HttpDelete]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    [Route("{responseId:int}")]
+    [Route("{resourceId}/{responseId:int}")]
     public async Task<IActionResult> RemoveResponseHandler(int responseId)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -169,7 +169,7 @@ public class ResponseController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(ResponseHandler), StatusCodes.Status200OK)]
-    [Route("{responseId}")]
+    [Route("{resourceId}/{responseId}")]
     public async Task<IActionResult> UpdateResponseHandler([FromBody] ResponseHandlerDto request, int responseId)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

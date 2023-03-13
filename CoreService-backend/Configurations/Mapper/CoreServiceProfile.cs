@@ -22,7 +22,7 @@ public class CoreServiceProfile : Profile
             .ForMember(d => d.Refresh, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.RefreshInSeconds)));
         //.ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId));
 
-        CreateMap<ResourceDto, ResourceWithTimeDto>()
+        CreateMap<ResourceCreateDto, ResourceWithTimeDto>()
             .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => DateTime.Now));
 
         CreateMap<ResponseHandlerDto, ResponseHandler>();

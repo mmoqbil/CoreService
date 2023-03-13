@@ -14,5 +14,5 @@ public class JwtConfig
 {
     public string Secret { get; set; }
     public int AccessTokenExpirationMinutes { get; set; } = 120;
-    public TimeSpan AccessTokenExpirationSeconds { get; set; } = new (0, 0, 0, 45);
+    public TimeSpan AccessTokenExpirationSeconds { get; set; } = new (0, 6, 0, 0);
 }

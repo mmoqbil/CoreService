@@ -1,14 +1,11 @@
-﻿using CoreService_backend.Configurations.Extensions;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CoreService_backend.Models.Result;
-using CoreService_backend.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using CoreService_backend.Services.Api.Identity;
 using CoreService_backend.Models.Request;
 using CoreService_backend.Models.Response;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Security.Claims;
 
 namespace CoreService_backend.Controllers;
 
@@ -19,12 +16,14 @@ public class IdentityController : ControllerBase
 
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IAuthenticationService _authenticationManager;
+    private readonly IIdentityAccountManager _accountManager;
     
 
-    public IdentityController(UserManager<IdentityUser> userManager, IAuthenticationService authenticationManager)
+    public IdentityController(UserManager<IdentityUser> userManager, IAuthenticationService authenticationManager, IIdentityAccountManager accountManager)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
+        _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
     }
 
 
@@ -192,5 +191,94 @@ public class IdentityController : ControllerBase
             Token = authResponse.Token,
             RefreshToken = authResponse.RefreshToken,
         });
+    }
+
+    [HttpPut]
+    [Authorize("User")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route("username")]
+    public async Task<IActionResult> UpdateName([FromBody] UserNameUpdateRequestDto request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null && userId != request.userId)
+        {
+            return BadRequest();
+        }
+
+        var result = await _accountManager.ChangeUserName(request);
+
+        if (!result.Success)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
+
+        return NoContent();
+    }
+
+
+    [HttpPut]
+    [Authorize("User")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route("email")]
+    public async Task<IActionResult> UpdateEmail([FromBody] EmailUpdateRequestDto request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null && userId != request.userId)
+        {
+            return BadRequest();
+        }
+
+        var result = await _accountManager.ChangeEmail(request);
+
+        if (!result.Success)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
+
+        return NoContent();
+    }
+
+
+    [HttpPut]
+    [Authorize("User")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route("password")]
+    public async Task<IActionResult> UpdatePassword([FromBody] PasswordUpdateRequestDto request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null && userId != request.userId)
+        {
+            return BadRequest();
+        }
+
+        var result = await _accountManager.ChangePassword(request);
+
+        if (!result.Success)
+        {
+            return Problem(statusCode: 500, detail: "Something gone wrong");
+        }
+
+        return NoContent();
     }
 }

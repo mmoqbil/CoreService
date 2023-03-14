@@ -21,8 +21,7 @@ public static class WebApplicationBuilderAddPersistenceExtension
         builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
         builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
         builder.Services.AddScoped<IResponseService, ResponseServices>();
-        
-        
+        builder.Services.AddScoped<IIdentityAccountManager, IdentityAccountManager>();
 
         return builder;
     }

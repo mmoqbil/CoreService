@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CoreService_backend.Models.Dtos;
+namespace CoreService_backend.Models.Request;
 
 public class UserLoginRequestDto
 {

@@ -49,12 +49,19 @@ public class ResourceController : ControllerBase
     [Authorize(Roles = "User")]
     [ProducesResponseType(typeof(Resource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    [Route("{userId}/{resourceId}")]
+    [Route("{resourceId}")]
     public async Task<IActionResult> GetResource(string resourceId)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId != resourceId)
+        if (userId != null)
+        {
+            return Unauthorized();
+        }
+
+        var resourceUserId = await _resources.GetUserIdFromResourceId(resourceId);
+
+        if (userId != resourceUserId)
         {
             return Unauthorized();
         }

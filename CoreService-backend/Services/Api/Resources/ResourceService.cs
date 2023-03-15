@@ -61,4 +61,9 @@ public class ResourceService : IResourceService
     {
         return await _repository.CheckResourceExist(resourceId);
     }
+
+    public async Task<string?> GetUserIdFromResourceId(string resourceId)
+    {
+        return await _repository.GetUserIdFromResource(resourceId);
+    }
 }

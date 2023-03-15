@@ -69,4 +69,9 @@ public class ResourceRepository : IResourceRepository
     {
         return await _context.Resources.AnyAsync(r => r.Id == resourceId);
     }
+
+    public async Task<string?> GetUserIdFromResource(string resourceId)
+    {
+        return await _context.Resources.Select(r => r.Id).FirstOrDefaultAsync(id => id == resourceId);
+    }
 }

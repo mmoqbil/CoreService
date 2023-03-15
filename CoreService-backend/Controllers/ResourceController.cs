@@ -66,7 +66,6 @@ public class ResourceController : ControllerBase
             return Unauthorized();
         }
 
-        //TODO: returned resource should have resourceId
         return Ok(await _resources.GetResourceById(resourceId));
     }
 

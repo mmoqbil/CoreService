@@ -8,9 +8,6 @@ public static class WebApplicationBuilderAddAuthenticationExtension
 {
     public static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
     {
-        // dlaczego pomimo configuracji klasy w builderze Secret jest null'em?
-        var jwtConfig = new JwtConfig();
-
         var secretKey = builder.Configuration.GetSection("JwtConfig:Secret").Value;
         var key = Encoding.ASCII.GetBytes(secretKey);
         var tokenValidationParameters = new TokenValidationParameters()

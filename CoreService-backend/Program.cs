@@ -6,12 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //dlaczego nie dzia³a poprawnie kolejnoœæ pobierania configuracji? Nie pobiera danych z pliku secrets.json.
-builder.UserSecretsConfiguration();
+//builder.UserSecretsConfiguration();
 
 builder.AddMapper();
-builder.AddAuthentication();
 
 builder.ConfigureJwt();
+builder.AddAuthentication();
+
+
 builder.ConfigureIdentity();
 
 builder.AddControllers();

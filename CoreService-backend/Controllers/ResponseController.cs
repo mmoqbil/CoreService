@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using CoreService_backend.Models.Dtos;
 using CoreService_backend.Models.Entities;
+using CoreService_backend.Models.Result;
 using CoreService_backend.Services.Api.Resources;
 using CoreService_backend.Services.Api.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -100,20 +101,21 @@ public class ResponseController : ControllerBase
 
 
     [HttpGet]
+    [ProducesResponseType(typeof(GetResponseResult), StatusCodes.Status200OK)]
     [Route("{resourceId}/{responseId:int}")]
     public async Task<IActionResult> GetResponseById(string resourceId, int responseId)
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var resourceExists = await _resource.CheckResourceExists(resourceId);
 
-        if (userId == null && resourceExists)
+        if (userId == null || resourceExists)
         {
             return BadRequest();
         }
 
         var response = await _response.GetResponseById(responseId);
 
-        if (response == null)
+        if (!response.Success)
         {
             return NotFound();
         }
@@ -140,7 +142,7 @@ public class ResponseController : ControllerBase
             return Problem(statusCode: 500, detail: "Something gone wrong");
         }
 
-        return Ok(result.Response);
+        return Ok(result.Response); // zmienić na CreatedAtRoute()
 
         //return !result.Success ? Problem(statusCode: 500, detail: "Something gone wrong") : Ok(result.Response);
     }

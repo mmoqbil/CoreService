@@ -54,7 +54,7 @@ public class ResourceController : ControllerBase
     {
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId != null)
+        if (userId == null)
         {
             return Unauthorized();
         }

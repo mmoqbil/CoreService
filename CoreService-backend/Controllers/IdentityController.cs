@@ -193,6 +193,7 @@ public class IdentityController : ControllerBase
         });
     }
 
+
     [HttpPut]
     [Authorize("User")]
     [ProducesResponseType(StatusCodes.Status200OK)]

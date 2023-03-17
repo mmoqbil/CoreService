@@ -208,12 +208,12 @@ public class IdentityController : ControllerBase
 
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId == null && userId != request.userId)
+        if (userId == null)
         {
             return BadRequest();
         }
 
-        var result = await _accountManager.ChangeUserName(request);
+        var result = await _accountManager.ChangeUserName(request, userId);
 
         if (!result.Success)
         {
@@ -238,12 +238,12 @@ public class IdentityController : ControllerBase
 
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId == null && userId != request.userId)
+        if (userId == null)
         {
             return BadRequest();
         }
 
-        var result = await _accountManager.ChangeEmail(request);
+        var result = await _accountManager.ChangeEmail(request, userId);
 
         if (!result.Success)
         {
@@ -268,12 +268,12 @@ public class IdentityController : ControllerBase
 
         var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId == null && userId != request.userId)
+        if (userId == null)
         {
             return BadRequest();
         }
 
-        var result = await _accountManager.ChangePassword(request);
+        var result = await _accountManager.ChangePassword(request, userId);
 
         if (!result.Success)
         {

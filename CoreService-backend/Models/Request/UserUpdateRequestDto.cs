@@ -1,22 +1,17 @@
 ﻿namespace CoreService_backend.Models.Request;
 
 
-public class UserUpdateRequestDto
-{
-    public string userId { get; set; }
-}
-
-public class UserNameUpdateRequestDto : UserUpdateRequestDto
+public class UserNameUpdateRequestDto
 {
     public string newUserName { get; set; }
 }
 
-public class EmailUpdateRequestDto : UserUpdateRequestDto
+public class EmailUpdateRequestDto
 {
     public string newEmail { get; set; }
 }
 
-public class PasswordUpdateRequestDto : UserUpdateRequestDto
+public class PasswordUpdateRequestDto
 {
     public string newPassword { get; set; }
     public string currentPassword { get; set; }

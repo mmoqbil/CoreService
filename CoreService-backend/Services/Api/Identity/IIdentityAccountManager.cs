@@ -6,7 +6,7 @@ namespace CoreService_backend.Services.Api.Identity;
 
 public interface IIdentityAccountManager
 {
-    public Task<IdentityResult> ChangeUserName(UserNameUpdateRequestDto request);
-    public Task<IdentityResult> ChangeEmail(EmailUpdateRequestDto request);
-    public Task<IdentityResult> ChangePassword(PasswordUpdateRequestDto request);
+    public Task<IdentityResult> ChangeUserName(UserNameUpdateRequestDto request, string userId);
+    public Task<IdentityResult> ChangeEmail(EmailUpdateRequestDto request, string userId);
+    public Task<IdentityResult> ChangePassword(PasswordUpdateRequestDto request, string userId);
 }

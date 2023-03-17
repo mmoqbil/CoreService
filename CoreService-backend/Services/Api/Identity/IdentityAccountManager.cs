@@ -21,9 +21,9 @@ public class IdentityAccountManager : IIdentityAccountManager
     }
 
 
-    public async Task<IdentityResult> ChangeUserName(UserNameUpdateRequestDto request)
+    public async Task<IdentityResult> ChangeUserName(UserNameUpdateRequestDto request, string userId)
     {
-        var user = await _userManager.FindByIdAsync(request.userId);
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
@@ -51,9 +51,9 @@ public class IdentityAccountManager : IIdentityAccountManager
         };
     }
 
-    public async Task<IdentityResult> ChangeEmail(EmailUpdateRequestDto request)
+    public async Task<IdentityResult> ChangeEmail(EmailUpdateRequestDto request, string userId)
     {
-        var user = await _userManager.FindByIdAsync(request.userId);
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
@@ -81,9 +81,9 @@ public class IdentityAccountManager : IIdentityAccountManager
         };
     }
 
-    public async Task<IdentityResult> ChangePassword(PasswordUpdateRequestDto request)
+    public async Task<IdentityResult> ChangePassword(PasswordUpdateRequestDto request, string userId)
     {
-        var user = await _userManager.FindByIdAsync(request.userId);
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
